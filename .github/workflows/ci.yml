@@ -46,7 +46,7 @@ jobs:
       DATABASE_URL: postgres://consumo:consumo@localhost:5432/consumo_test
       JWT_SECRET: ci-placeholder-nao-usar-em-producao
       PORT: '10000'
-      FRONTEND_URL: 'https://consumo-energia-2.onrender.com,https://consumo-energia.pages.dev'
+      FRONTEND_URL: 'https://consumo-energia-2.web.app,https://consumo-energia.pages.dev'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -77,7 +77,7 @@ jobs:
           [ "$code" = "429" ]
       - name: Smoke CORS multi-origin (reflete origem da lista, sem wildcard)
         run: |
-          for origin in https://consumo-energia-2.onrender.com https://consumo-energia.pages.dev; do
+          for origin in https://consumo-energia-2.web.app https://consumo-energia.pages.dev; do
             acao=$(curl -s -D - -o /dev/null http://localhost:10000/health -H "Origin: $origin" | grep -i '^access-control-allow-origin:' | tr -d '\r' | awk '{print $2}')
             echo "Origin $origin -> Access-Control-Allow-Origin: $acao"
             test "$acao" = "$origin"
