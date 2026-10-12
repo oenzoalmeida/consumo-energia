@@ -4,7 +4,7 @@ Aplicação web para simular consumo de energia elétrica, estimar custos e comp
 
 ## Demonstração
 
-**Aplicação:** https://consumo-energia-2.onrender.com
+**Aplicação:** https://consumo-energia-2.web.app
 
 ## Credencial demo
 
@@ -35,7 +35,7 @@ Evolução de um projeto acadêmico de cálculo de consumo de energia. O usuári
 - **Frontend:** HTML5, CSS3, JavaScript
 - **Backend:** Node.js, Express, JWT
 - **Banco de dados:** PostgreSQL (Neon)
-- **Infraestrutura:** Render
+- **Infraestrutura:** Firebase Hosting (frontend) + Vercel (backend serverless)
 
 ## Perfis de acesso
 
@@ -68,8 +68,8 @@ O CI verifica a sintaxe dos arquivos JavaScript (`node --check`) e a integridade
 
 ## Deploy
 
-- **Frontend:** site estático no Render.
-- **Backend:** serviço Node no Render com variáveis `DATABASE_URL`, `JWT_SECRET` e `FRONTEND_URL`.
+- **Frontend:** Firebase Hosting (`https://consumo-energia-2.web.app`).
+- **Backend:** função serverless Node na Vercel (`https://consumo-energia-backend.vercel.app`).
 - **Banco:** PostgreSQL gerenciado no Neon.
 
 ## Deploy do frontend no Cloudflare Pages (opcional, sem custo)
