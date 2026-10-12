@@ -75,7 +75,7 @@ O CI verifica a sintaxe dos arquivos JavaScript (`node --check`) e a integridade
 ## Deploy do frontend no Cloudflare Pages (opcional, sem custo)
 
 O frontend é 100% portável: todo o acesso à API passa por `auth.js`, que chama o backend por URL
-absoluta (`https://consumo-energia-backend.onrender.com`, constante `API`), então **nenhuma
+absoluta (`https://consumo-energia-backend.vercel.app`, constante `API`), então **nenhuma
 mudança de código** é necessária. O backend já envia o cookie de sessão com
 `SameSite=None; Secure` fixo, então login cross-site funciona sem alteração. O backend é API pura
 (não serve estáticos), separação já existente na arquitetura atual.
@@ -105,12 +105,12 @@ serviço acordar. Nada no Render é apagado nesta migração.
 ### CORS do backend durante o cutover (Render + Cloudflare Pages no ar)
 
 O backend aceita `FRONTEND_URL` com **uma única origem** (comportamento original; default:
-`https://consumo-energia-2.onrender.com`) ou com uma **lista de origens separadas por vírgula**.
+`https://consumo-energia-2.web.app`) ou com uma **lista de origens separadas por vírgula**.
 Para o período de transição, com o front antigo no Render e o novo no Cloudflare Pages
 simultaneamente no ar, configure as duas origens (Render → serviço do backend → Environment):
 
 ```text
-FRONTEND_URL=https://consumo-energia-2.onrender.com,https://consumo-energia.pages.dev
+FRONTEND_URL=https://consumo-energia-2.web.app,https://consumo-energia.pages.dev
 ```
 
 - Com a lista, a resposta CORS reflete a origem da requisição quando ela está na lista (nunca

@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 const DATABASE_URL = process.env.DATABASE_URL;
 const JWT_SECRET = process.env.JWT_SECRET;
-const FRONTEND_URL = process.env.FRONTEND_URL || 'https://consumo-energia-2.onrender.com';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://consumo-energia-2.web.app';
 // FRONTEND_URL aceita uma ou mais origens separadas por vírgula (transição
 // Render -> Cloudflare Pages). Com um único valor (ou o default), o
 // comportamento permanece idêntico ao anterior (origin fixa).
