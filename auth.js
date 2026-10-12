@@ -1,7 +1,7 @@
 'use strict';
 
 const EnergyCloud = (() => {
-  const API = 'https://consumo-energia-backend.onrender.com';
+  const API = 'https://consumo-energia-backend.vercel.app';
   let currentUser = null;
   let resolveReady;
   const ready = new Promise(resolve => { resolveReady = resolve; });
