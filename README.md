@@ -82,60 +82,34 @@ O CI verifica a sintaxe dos arquivos JavaScript (`node --check`) e a integridade
 
 **Banco:** PostgreSQL gerenciado no Neon.
 
-## Deploy do frontend no Cloudflare Pages (opcional, sem custo)
+## Frontend no Cloudflare Pages (alternativa)
 
-O frontend é 100% portável: todo o acesso à API passa por `auth.js`, que chama o backend por URL
-absoluta (`https://consumo-energia-backend.vercel.app`, constante `API`), então **nenhuma
-mudança de código** é necessária. O backend já envia o cookie de sessão com
-`SameSite=None; Secure` fixo, então login cross-site funciona sem alteração. O backend é API pura
-(não serve estáticos), separação já existente na arquitetura atual.
+O frontend pode ser publicado como site estático no Cloudflare Pages. Essa alternativa não foi adotada pela configuração atual do repositório: o frontend permanece no Firebase Hosting e a API na Vercel.
 
-| Aspecto | Hoje (front no Render static) | Front no Pages + backend no Render free |
-|---|---|---|
-| Carregamento da página | Site estático no Render (CDN, já sem cold start) | Imediato (edge Cloudflare, sem cold start) |
-| Primeira chamada de API após o backend dormir | Cold start do backend Node (~13–24s) | **Continua sentindo o cold start do backend** (~13–24s no primeiro login/GET após 15 min de inatividade) |
-| Custo | R$ 0 | R$ 0 (Pages free) |
-| DNS próprio | Não exigido | Não exigido (`*.pages.dev`) |
+A interface chama `https://consumo-energia-backend.vercel.app` por URL absoluta. Trocar a hospedagem do frontend exige permitir a nova origem em `FRONTEND_URL` no projeto do backend na Vercel. A alternativa não elimina eventuais inicializações a frio da função serverless.
 
-A migração melhora apenas o carregamento da página. O backend Node continua
-no Render free, adormece após 15 minutos e a primeira ação que toca a API continua esperando o
-serviço acordar. Nada no Render é apagado nesta migração.
+### Configuração do frontend
 
-### Passo a passo (dashboard Cloudflare, sem CLI)
+| Campo | Valor |
+|---|---|
+| Diretório raiz | Raiz do repositório |
+| Framework | Nenhum |
+| Comando de build | Vazio |
+| Diretório de publicação | `/` |
 
-**Passo 1.** Cloudflare Dashboard → **Workers & Pages** → *Create* → **Pages** → *Connect to Git* →
-autorize e selecione este repositório.
+Conecte o repositório no Cloudflare Pages e use os valores acima. O domínio gerado deve ser usado na configuração de CORS. Nenhuma publicação ou troca de domínio é feita pelos exemplos deste README.
 
-**Passo 2.** *Project name:* `consumo-energia` (o domínio fica `consumo-energia.pages.dev`).
+### CORS durante uma troca de hospedagem
 
-**Passo 3.** *Build configuration*:
-
-**Framework preset:** `None`.
-
-**Build command:** vazio (é um site estático, sem build).
-
-**Build output directory:** `/` (raiz do repositório).
-
-**Passo 4.** *Save and Deploy*. O front sobe em `https://consumo-energia.pages.dev`.
-
-### CORS do backend durante o cutover (Render + Cloudflare Pages no ar)
-
-O backend aceita `FRONTEND_URL` com **uma única origem** (comportamento original, default:
-`https://consumo-energia-2.web.app`) ou com uma **lista de origens separadas por vírgula**.
-Para o período de transição, com o front antigo no Render e o novo no Cloudflare Pages
-simultaneamente no ar, configure as duas origens (Render → serviço do backend → Environment):
+O backend aceita uma origem ou uma lista de origens separadas por vírgula em `FRONTEND_URL`. Durante a transição, configure a origem atual e o domínio realmente criado no Pages:
 
 ```text
-FRONTEND_URL=https://consumo-energia-2.web.app,https://consumo-energia.pages.dev
+FRONTEND_URL=https://consumo-energia-2.web.app,https://<projeto>.pages.dev
 ```
 
-Com a lista, a resposta CORS reflete a origem da requisição quando ela está na lista (nunca `*`, pois os endpoints usam cookies com `credentials: true`). Origem fora da lista não recebe cabeçalho `Access-Control-Allow-Origin`.
+A resposta CORS permite somente as origens configuradas, com suporte aos cookies da sessão. Os cookies em produção usam `SameSite=None; Secure`. Atualize as variáveis do backend na Vercel e faça redeploy antes de validar o login no novo frontend.
 
-Com um único valor em `FRONTEND_URL`, o comportamento é exatamente o mesmo de antes (origin fixa).
-
-Cookies não mudam: `SameSite=None; Secure` continua igual para as duas origens.
-
-Após o cutover (front do Render desativado), deixe apenas `FRONTEND_URL=https://consumo-energia.pages.dev`.
+Após confirmar o funcionamento, mantenha apenas as origens ainda utilizadas. As instruções do ambiente antigo foram preservadas em [Histórico de hospedagem](docs/hospedagem-historica.md).
 
 ## Limitações conhecidas
 
