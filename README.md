@@ -8,7 +8,7 @@ Aplicação web para simular consumo de energia elétrica, estimar custos e comp
 
 ## Credencial demo
 
-> **Nota:** as credenciais abaixo são públicas para fins de demonstração; os dados da conta demo podem ser alterados por outros visitantes.
+> **Nota:** as credenciais abaixo são públicas para fins de demonstração. Os dados da conta demo podem ser alterados por outros visitantes.
 
 | Perfil | E-mail | Senha |
 |---|---|---|
@@ -22,37 +22,45 @@ Evolução de um projeto acadêmico de cálculo de consumo de energia. O usuári
 
 ## Funcionalidades principais
 
-- Cadastro e login de usuários com sessão por cookie HttpOnly
-- Cadastro de aparelhos e tarifa por usuário
-- Estimativa de consumo (kWh), custo mensal e projeção anual
-- Classificação do consumo e destaque do maior consumidor
-- Dados salvos por usuário (um cenário por conta)
-- Painel administrativo de gestão de contas
-- Exclusão definitiva da conta pela própria interface
+- Cadastro e login de usuários com sessão por cookie HttpOnly.
+- Cadastro de aparelhos e tarifa por usuário.
+- Estimativa de consumo (kWh), custo mensal e projeção anual.
+- Classificação do consumo e destaque do maior consumidor.
+- Dados salvos por usuário (um cenário por conta).
+- Painel administrativo de gestão de contas.
+- Exclusão definitiva da conta pela própria interface.
 
 ## Tecnologias
 
-- **Frontend:** HTML5, CSS3, JavaScript
-- **Backend:** Node.js, Express, JWT
-- **Banco de dados:** PostgreSQL (Neon)
-- **Infraestrutura:** Firebase Hosting (frontend) + Vercel (backend serverless)
+**Frontend:** HTML5, CSS3, JavaScript.
+
+**Backend:** Node.js, Express, JWT.
+
+**Banco de dados:** PostgreSQL (Neon).
+
+**Infraestrutura:** Firebase Hosting (frontend) + Vercel (backend serverless).
 
 ## Perfis de acesso
 
-- **Usuário (USER):** gerencia a própria simulação e pode excluir a própria conta.
-- **Administrador (ADMIN):** lista contas e ativa/desativa usuários. Credencial não pública.
+**Usuário (USER):** gerencia a própria simulação e pode excluir a própria conta.
+
+**Administrador (ADMIN):** lista contas e ativa/desativa usuários. Credencial não pública.
 
 ## Segurança e privacidade
 
-- Senhas com hash scrypt (sal aleatório) e comparação em tempo constante; nenhum segredo de produção versionado.
-- Sessão por JWT em cookie HttpOnly/Secure/SameSite; CORS restrito ao domínio do frontend.
-- Consultas SQL parametrizadas; saídas do frontend escapadas.
-- Sem analytics, rastreamento ou cookies de terceiros (apenas o cookie de sessão).
-- Termos de Uso e Política de Privacidade disponíveis na aplicação.
+Senhas com hash scrypt (sal aleatório) e comparação em tempo constante. Nenhum segredo de produção versionado.
+
+Sessão por JWT em cookie HttpOnly/Secure/SameSite. CORS restrito ao domínio do frontend.
+
+Consultas SQL parametrizadas. Saídas do frontend escapadas.
+
+Sem analytics, rastreamento ou cookies de terceiros (apenas o cookie de sessão).
+
+Termos de Uso e Política de Privacidade disponíveis na aplicação.
 
 ## Executando localmente
 
-Backend (requer `DATABASE_URL` e `JWT_SECRET`; opcional `PORT` e `FRONTEND_URL`):
+O backend requer `DATABASE_URL` e `JWT_SECRET`. As variáveis `PORT` e `FRONTEND_URL` são opcionais.
 
 ```bash
 cd backend
@@ -60,7 +68,7 @@ npm install
 npm start
 ```
 
-Frontend: abra `index.html` via um servidor estático local. A URL da API é definida em `auth.js` (`const API`) — ajuste se necessário.
+Frontend: abra `index.html` via um servidor estático local. A URL da API é definida em `auth.js` (`const API`). Ajuste esse valor se necessário.
 
 ## Testes
 
@@ -68,9 +76,11 @@ O CI verifica a sintaxe dos arquivos JavaScript (`node --check`) e a integridade
 
 ## Deploy
 
-- **Frontend:** Firebase Hosting (`https://consumo-energia-2.web.app`).
-- **Backend:** função serverless Node na Vercel (`https://consumo-energia-backend.vercel.app`).
-- **Banco:** PostgreSQL gerenciado no Neon.
+**Frontend:** Firebase Hosting (`https://consumo-energia-2.web.app`).
+
+**Backend:** função serverless Node na Vercel (`https://consumo-energia-backend.vercel.app`).
+
+**Banco:** PostgreSQL gerenciado no Neon.
 
 ## Deploy do frontend no Cloudflare Pages (opcional, sem custo)
 
@@ -87,24 +97,30 @@ mudança de código** é necessária. O backend já envia o cookie de sessão co
 | Custo | R$ 0 | R$ 0 (Pages free) |
 | DNS próprio | Não exigido | Não exigido (`*.pages.dev`) |
 
-**Aviso honesto:** a migração melhora apenas o carregamento da página. O backend Node continua
+A migração melhora apenas o carregamento da página. O backend Node continua
 no Render free, adormece após 15 minutos e a primeira ação que toca a API continua esperando o
 serviço acordar. Nada no Render é apagado nesta migração.
 
 ### Passo a passo (dashboard Cloudflare, sem CLI)
 
-1. Cloudflare Dashboard → **Workers & Pages** → *Create* → **Pages** → *Connect to Git* →
-   autorize e selecione este repositório.
-2. *Project name:* `consumo-energia` (o domínio fica `consumo-energia.pages.dev`).
-3. *Build configuration*:
-   - **Framework preset:** `None`
-   - **Build command:** vazio (é um site estático, sem build)
-   - **Build output directory:** `/` (raiz do repositório)
-4. *Save and Deploy*. O front sobe em `https://consumo-energia.pages.dev`.
+**Passo 1.** Cloudflare Dashboard → **Workers & Pages** → *Create* → **Pages** → *Connect to Git* →
+autorize e selecione este repositório.
+
+**Passo 2.** *Project name:* `consumo-energia` (o domínio fica `consumo-energia.pages.dev`).
+
+**Passo 3.** *Build configuration*:
+
+**Framework preset:** `None`.
+
+**Build command:** vazio (é um site estático, sem build).
+
+**Build output directory:** `/` (raiz do repositório).
+
+**Passo 4.** *Save and Deploy*. O front sobe em `https://consumo-energia.pages.dev`.
 
 ### CORS do backend durante o cutover (Render + Cloudflare Pages no ar)
 
-O backend aceita `FRONTEND_URL` com **uma única origem** (comportamento original; default:
+O backend aceita `FRONTEND_URL` com **uma única origem** (comportamento original, default:
 `https://consumo-energia-2.web.app`) ou com uma **lista de origens separadas por vírgula**.
 Para o período de transição, com o front antigo no Render e o novo no Cloudflare Pages
 simultaneamente no ar, configure as duas origens (Render → serviço do backend → Environment):
@@ -113,24 +129,25 @@ simultaneamente no ar, configure as duas origens (Render → serviço do backend
 FRONTEND_URL=https://consumo-energia-2.web.app,https://consumo-energia.pages.dev
 ```
 
-- Com a lista, a resposta CORS reflete a origem da requisição quando ela está na lista (nunca
-  `*`, pois os endpoints usam cookies com `credentials: true`). Origem fora da lista não recebe
-  cabeçalho `Access-Control-Allow-Origin`.
-- Com um único valor em `FRONTEND_URL`, o comportamento é exatamente o mesmo de antes
-  (origin fixa).
-- Cookies não mudam: `SameSite=None; Secure` continua igual para as duas origens.
-- Após o cutover (front do Render desativado), deixe apenas
-  `FRONTEND_URL=https://consumo-energia.pages.dev`.
+Com a lista, a resposta CORS reflete a origem da requisição quando ela está na lista (nunca `*`, pois os endpoints usam cookies com `credentials: true`). Origem fora da lista não recebe cabeçalho `Access-Control-Allow-Origin`.
+
+Com um único valor em `FRONTEND_URL`, o comportamento é exatamente o mesmo de antes (origin fixa).
+
+Cookies não mudam: `SameSite=None; Secure` continua igual para as duas origens.
+
+Após o cutover (front do Render desativado), deixe apenas `FRONTEND_URL=https://consumo-energia.pages.dev`.
 
 ## Limitações conhecidas
 
-- Sem verificação de e-mail e sem recuperação de senha.
-- Sem rate limiting nas rotas de autenticação.
-- A simulação mantém um único cenário por usuário (sem histórico).
+Sem verificação de e-mail e sem recuperação de senha.
+
+Sem rate limiting nas rotas de autenticação.
+
+A simulação mantém um único cenário por usuário (sem histórico).
 
 ## Avisos específicos
 
-- Os cálculos são **estimativas** baseadas na potência nominal informada e na tarifa definida pelo usuário; não consideram bandeiras tarifárias, impostos nem o histórico real da unidade consumidora, e não substituem a fatura da distribuidora.
+Os cálculos são **estimativas** baseadas na potência nominal informada e na tarifa definida pelo usuário. Não consideram bandeiras tarifárias, impostos nem o histórico real da unidade consumidora, e não substituem a fatura da distribuidora.
 
 ## Autor
 
