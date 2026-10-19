@@ -6,6 +6,7 @@
       ".firebaserc",
       "firebase-debug.log",
       "backend/**",
+      "tests/**",
       ".github/**",
       ".git/**",
       "**/.*",
@@ -17,6 +18,12 @@
         "source": "/*.html",
         "headers": [
           { "key": "Cache-Control", "value": "max-age=0, must-revalidate" }
+        ]
+      },
+      {
+        "source": "/calc.js",
+        "headers": [
+          { "key": "Cache-Control", "value": "max-age=3600" }
         ]
       },
       {
