@@ -1,3 +1,4 @@
+import { createRateLimitCleanup } from './maintenance.js';
 import { databaseOptions, positiveInteger, proxyHops, createAuthRateLimit } from './security.js';
 import express from 'express';
 import cors from 'cors';
@@ -60,6 +61,8 @@ async function auth(req, res, next) {
   } catch { return res.status(401).json({ error: 'Sessão inválida' }); }
 }
 function admin(req, res, next) { return req.user?.role === 'ADMIN' ? next() : res.status(403).json({ error: 'Acesso restrito' }); }
+
+app.get('/api/internal/maintenance/rate-limits', createRateLimitCleanup(pool));
 
 app.get('/health', (_req,res)=>res.json({ok:true}));
 app.post('/api/auth/register', async (req,res) => {
