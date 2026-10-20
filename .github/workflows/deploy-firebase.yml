@@ -29,6 +29,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Testes antes de publicar
+        run: node --test tests/calc.test.js
+
       - name: Deploy to Firebase Hosting
         env:
           ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
