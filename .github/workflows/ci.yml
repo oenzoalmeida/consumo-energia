@@ -17,11 +17,16 @@ jobs:
           node-version: '22'
 
       - name: Check JavaScript syntax
-        run: node --check script.js
+        run: |
+          node --check script.js
+          node --check calc.js
+      - name: Testes das regras de cálculo
+        run: node --test tests/calc.test.js
       - name: Check required files
         run: |
           test -f index.html
           test -f style.css
+          test -f calc.js
 
   backend:
     runs-on: ubuntu-latest
