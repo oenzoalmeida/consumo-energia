@@ -1,3 +1,4 @@
+import { databaseOptions, positiveInteger, proxyHops, createAuthRateLimit } from './security.js';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -18,31 +19,19 @@ const FRONTEND_ORIGINS = FRONTEND_URL.split(',').map(origin => origin.trim()).fi
 if (!DATABASE_URL) throw new Error('DATABASE_URL is required');
 if (!JWT_SECRET) throw new Error('JWT_SECRET is required');
 
-const pool = new pg.Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
+const pool = new pg.Pool(databaseOptions());
+pool.on('error', () => console.error('Database pool unavailable'));
+app.set('trust proxy', proxyHops());
 app.use(cors({ origin: FRONTEND_ORIGINS.length > 1 ? FRONTEND_ORIGINS : FRONTEND_URL, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 
 const cookie = { httpOnly: true, secure: true, sameSite: 'none', path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 };
 
-// Rate limit simples in-memory por IP (janela fixa) para os endpoints de autenticação
-// (login: força bruta; register: abuso de criação de contas). Ajustável via env.
-const RATE_LIMIT_PER_MINUTE = Number(process.env.RATE_LIMIT_PER_MINUTE || 10);
-const RATE_WINDOW_MS = 60_000;
-const rateHits = new Map(); // ip -> { start, count }
-function rateLimit(req, res, next) {
-  const xff = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
-  const ip = xff || req.socket?.remoteAddress || 'unknown';
-  const now = Date.now();
-  let w = rateHits.get(ip);
-  if (!w || now - w.start >= RATE_WINDOW_MS) { w = { start: now, count: 0 }; rateHits.set(ip, w); }
-  if (rateHits.size > 10_000) for (const [k, v] of rateHits) if (now - v.start >= RATE_WINDOW_MS) rateHits.delete(k);
-  if (++w.count > RATE_LIMIT_PER_MINUTE) {
-    res.setHeader('Retry-After', Math.max(1, Math.ceil((RATE_WINDOW_MS - (now - w.start)) / 1000)));
-    return res.status(429).json({ error: 'Muitas requisições. Tente novamente em instantes.' });
-  }
-  next();
-}
+const rateLimit = createAuthRateLimit(pool, {
+  max: positiveInteger(process.env.RATE_LIMIT_PER_MINUTE, 10, 'RATE_LIMIT_PER_MINUTE'),
+  windowMs: 60000
+});
 app.use('/api/auth/login', rateLimit);
 app.use('/api/auth/register', rateLimit);
 const sign = user => jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
