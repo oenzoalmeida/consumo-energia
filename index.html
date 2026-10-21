@@ -23,6 +23,8 @@
     <meta name="twitter:description" content="Simule o consumo elétrico dos seus aparelhos, estime custos e visualize os maiores consumidores.">
     <meta name="twitter:image" content="https://consumo-energia-2.web.app/og-image.png">
 
+    <link rel="canonical" href="https://consumo-energia-2.web.app/">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -275,6 +277,7 @@
         <div
                 id="destaque-consumo"
                 class="destaque-vazio"
+                aria-live="polite"
         >
             Cadastre aparelhos para visualizar a análise.
         </div>
@@ -365,7 +368,7 @@
         </div>
 
 
-        <p id="mensagem-vazia">
+        <p id="mensagem-vazia" aria-live="polite">
             Nenhum aparelho cadastrado.
         </p>
 
