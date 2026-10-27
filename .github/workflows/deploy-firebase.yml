@@ -35,4 +35,4 @@ jobs:
       - name: Deploy to Firebase Hosting
         env:
           ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
-        run: npx --yes firebase-tools@latest deploy --only hosting --project consumo-energia-2 --non-interactive --token ""
+        run: npx --yes firebase-tools@latest deploy --only hosting --project consumo-energia-2 --non-interactive --token "$ACCESS_TOKEN"
