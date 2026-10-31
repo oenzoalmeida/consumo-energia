@@ -16,6 +16,12 @@ Aplicação web para simular consumo de energia elétrica, estimar custos e comp
 
 O acesso administrativo é interno e não possui credencial pública.
 
+## Capturas de tela
+
+| Entrada | Simulador |
+|---|---|
+| ![Tela de entrada](docs/screenshots/entrada.png) | ![Simulador de consumo](docs/screenshots/simulador.png) |
+
 ## Sobre
 
 Evolução de um projeto acadêmico de cálculo de consumo de energia. O usuário cadastra aparelhos (potência, horas e dias de uso) e a tarifa, e o sistema estima consumo mensal em kWh, custo e projeção anual, com classificação por faixas de consumo.
