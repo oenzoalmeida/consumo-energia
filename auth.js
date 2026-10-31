@@ -54,9 +54,32 @@ const EnergyCloud = (() => {
       try {
         const body={email:el.querySelector('#e-email').value.trim(),password:password.value}; if(mode==='register') body.name=name.value.trim();
         const result=await request(`/api/auth/${mode==='register'?'register':'login'}`,{method:'POST',body:JSON.stringify(body)}); currentUser=result.user;
+        if(currentUser.mustChange){ el.remove(); forceChange(); return; }
         if(currentUser.role==='ADMIN'){ location.href='./admin.html'; return; }
         el.remove(); accountPill(); resolveReady(currentUser);
       } catch(err){ msg.textContent=err.message; }
+    };
+  }
+
+  function forceChange() {
+    const el = document.createElement('div');
+    el.className = 'energy-auth';
+    el.innerHTML = `<section class="energy-auth-card" role="dialog" aria-modal="true" aria-label="Troca de senha obrigatória"><h1>Crie sua senha definitiva</h1><p>Por segurança, você precisa trocar a senha temporária antes de continuar.</p><form id="e-force" class="energy-form"><label class="energy-sr" for="e-current">Senha temporária</label><input id="e-current" type="password" placeholder="Senha temporária" autocomplete="current-password" required><label class="energy-sr" for="e-new">Nova senha</label><input id="e-new" type="password" placeholder="Nova senha (mín. 12 caracteres)" autocomplete="new-password" required><label class="energy-sr" for="e-confirm">Confirmar nova senha</label><input id="e-confirm" type="password" placeholder="Confirmar nova senha" autocomplete="new-password" required><button id="e-force-submit" type="submit">Definir nova senha</button></form><p id="e-force-msg" class="energy-msg"></p></section>`;
+    document.body.appendChild(el);
+    el.querySelector('#e-current').focus();
+    el.querySelector('#e-force').onsubmit = async event => {
+      event.preventDefault();
+      const msg = el.querySelector('#e-force-msg');
+      msg.textContent = '';
+      const current = el.querySelector('#e-current').value, next = el.querySelector('#e-new').value, confirm = el.querySelector('#e-confirm').value;
+      if (next !== confirm) { msg.textContent = 'As senhas novas não coincidem'; return; }
+      try {
+        const result = await request('/api/auth/change-password', { method: 'POST', body: JSON.stringify({ current_password: current, new_password: next }) });
+        currentUser = result.user;
+        el.remove();
+        if (currentUser.role === 'ADMIN') { location.href = './admin.html'; return; }
+        accountPill(); resolveReady(currentUser);
+      } catch (err) { msg.textContent = err.message; }
     };
   }
 
@@ -64,6 +87,7 @@ const EnergyCloud = (() => {
     injectStyles();
     try {
       const result=await request('/api/auth/me'); currentUser=result.user;
+      if(currentUser.mustChange){ forceChange(); return; }
       if(currentUser.role==='ADMIN'){ location.href='./admin.html'; return; }
       accountPill(); resolveReady(currentUser);
     } catch { gate(); }
