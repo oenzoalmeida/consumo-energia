@@ -6,13 +6,9 @@ Aplicação web para simular consumo de energia elétrica, estimar custos e comp
 
 **Aplicação:** https://consumo-energia-2.web.app
 
-## Credencial demo
+## Acesso demo
 
-> **Nota:** as credenciais abaixo são públicas para fins de demonstração. Os dados da conta demo podem ser alterados por outros visitantes.
-
-| Perfil | E-mail | Senha |
-|---|---|---|
-| Usuário | `demo@consumoenergia.app` | `ConsumoEnergia@2026` |
+> O acesso de demonstração está **temporariamente indisponível**. A aplicação segue no ar no endereço acima; esta seção será atualizada quando a credencial demo estiver ativa novamente.
 
 O acesso administrativo é interno e não possui credencial pública.
 
