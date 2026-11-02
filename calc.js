@@ -87,6 +87,76 @@
     }, aparelhos[0]);
   }
 
+  /** Arredonda para duas casas (horas simuladas podem virar fração). */
+  function arredondar2(valor) {
+    return Math.round(Number(valor) * 100) / 100;
+  }
+
+  /**
+   * Cenário econômico: mesma lista de aparelhos com as horas de uso reduzidas
+   * pelo percentual informado (1 a 99). O consumo de cada item já sai
+   * recalculado. É uma simulação sobre premissas, não previsão de fatura.
+   */
+  function simularCenarioEconomico(aparelhos, percentualReducao) {
+    const p = Number(percentualReducao);
+    if (!Number.isFinite(p) || p <= 0 || p >= 100) {
+      throw new RangeError('O percentual de redução deve ficar entre 1 e 99.');
+    }
+    return aparelhos.map(function (a) {
+      const horas = arredondar2(Number(a.horas) * (1 - p / 100));
+      return Object.assign({}, a, {
+        horas: horas,
+        consumo: calcularConsumo(Number(a.potencia), horas, Number(a.dias)),
+      });
+    });
+  }
+
+  /** Resumo de um cenário: consumo mensal, custo mensal e custo anual. */
+  function resumoCenario(aparelhos, tarifa) {
+    const consumoKwh = somarConsumo(aparelhos);
+    const custoMes = calcularCusto(consumoKwh, tarifa);
+    return { consumoKwh: consumoKwh, custoMes: custoMes, custoAno: custoMes * 12 };
+  }
+
+  /** Escapa um valor para CSV separado por ponto e vírgula. */
+  function csvValor(valor) {
+    const texto = String(valor);
+    return /[;"\n]/.test(texto) ? '"' + texto.replace(/"/g, '""') + '"' : texto;
+  }
+
+  /**
+   * CSV da estimativa comparativa: premissas no cabeçalho (com o aviso de que
+   * não é previsão da fatura), uma linha por aparelho e os totais dos dois
+   * cenários. Separador ';' e decimais com vírgula, como se lê em pt-BR.
+   */
+  function gerarCsvEstimativa(opcoes) {
+    const aparelhos = opcoes.aparelhos || [];
+    const tarifa = Number(opcoes.tarifa || 0);
+    const percentual = Number(opcoes.percentualReducao);
+    const geradoEm = opcoes.geradoEm || new Date().toISOString();
+    const economico = simularCenarioEconomico(aparelhos, percentual);
+    const atual = resumoCenario(aparelhos, tarifa);
+    const eco = resumoCenario(economico, tarifa);
+    const linhas = [
+      '# Estimativa de consumo de energia - simulação sobre premissas informadas',
+      '# Gerado em: ' + geradoEm,
+      '# Premissas: tarifa de R$ ' + formatarNumero(tarifa) + ' por kWh; usos cadastrados pelo usuário; redução simulada de ' + formatarNumero(percentual) + '% nas horas de uso',
+      '# Estes valores são estimativas calculadas a partir das premissas acima, não a previsão exata da fatura.',
+      'aparelho;potencia_w;horas_dia_atual;dias_mes;kwh_mes_atual;kwh_mes_economico;custo_mes_atual;custo_mes_economico',
+    ];
+    aparelhos.forEach(function (a, i) {
+      const e = economico[i];
+      linhas.push([
+        csvValor(a.nome), Number(a.potencia), formatarNumero(a.horas), Number(a.dias),
+        formatarNumero(a.consumo), formatarNumero(e.consumo),
+        formatarNumero(calcularCusto(a.consumo, tarifa)), formatarNumero(calcularCusto(e.consumo, tarifa)),
+      ].join(';'));
+    });
+    linhas.push('TOTAL;;;;' + formatarNumero(atual.consumoKwh) + ';' + formatarNumero(eco.consumoKwh) + ';' + formatarNumero(atual.custoMes) + ';' + formatarNumero(eco.custoMes));
+    linhas.push('# Custo anual estimado: atual R$ ' + formatarNumero(atual.custoAno) + '; cenário econômico R$ ' + formatarNumero(eco.custoAno) + '; economia estimada R$ ' + formatarNumero(atual.custoAno - eco.custoAno));
+    return linhas.join('\n') + '\n';
+  }
+
   /** Número com duas casas e vírgula decimal, como se escreve em português. */
   function formatarNumero(valor) {
     return Number(valor).toFixed(2).replace('.', ',');
@@ -112,5 +182,9 @@
     maiorConsumidor: maiorConsumidor,
     formatarNumero: formatarNumero,
     formatarDinheiro: formatarDinheiro,
+    arredondar2: arredondar2,
+    simularCenarioEconomico: simularCenarioEconomico,
+    resumoCenario: resumoCenario,
+    gerarCsvEstimativa: gerarCsvEstimativa,
   };
 });

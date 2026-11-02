@@ -14,7 +14,12 @@ const EnergyCloud = (() => {
     });
     if (response.status === 204) return null;
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || 'Não foi possível concluir a operação');
+    if (!response.ok) {
+      const err = new Error(data.error || 'Não foi possível concluir a operação');
+      err.status = response.status;
+      if (data.version !== undefined) err.version = data.version;
+      throw err;
+    }
     return data;
   }
 
@@ -92,8 +97,8 @@ const EnergyCloud = (() => {
       accountPill(); resolveReady(currentUser);
     } catch { gate(); }
   }
-  async function load(){ await ready; const r=await request('/api/data'); return r.data || {}; }
-  async function save(data){ await ready; await request('/api/data',{method:'PUT',body:JSON.stringify({data})}); }
+  async function load(){ await ready; const r=await request('/api/data'); return { data: r.data || {}, version: Number(r.version) || 0 }; }
+  async function save(data, baseVersion){ await ready; return await request('/api/data',{method:'PUT',body:JSON.stringify({data, baseVersion})}); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
   return { API, ready, request, load, save, get user(){return currentUser;} };
 })();

@@ -672,3 +672,126 @@ footer {
     }
 
 }
+
+/* Comparação de cenários */
+.controles-comparacao {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.controles-comparacao label {
+    font-weight: 600;
+    color: #334155;
+    font-size: 14px;
+}
+
+.controles-comparacao input {
+    width: 90px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font: inherit;
+}
+
+.controles-comparacao button {
+    border: 0;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #1d4ed8;
+    color: #fff;
+}
+
+.controles-comparacao button + button {
+    background: #eef3f8;
+    color: #1d4ed8;
+}
+
+.tabela-comparacao {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+}
+
+.tabela-comparacao th,
+.tabela-comparacao td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+
+.premissas-comparacao {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+@media (max-width: 640px) {
+    .controles-comparacao {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controles-comparacao input {
+        width: 100%;
+    }
+
+    .tabela-comparacao th,
+    .tabela-comparacao td {
+        padding: 6px 6px;
+        font-size: 13px;
+    }
+}
+
+/* Celular: a tabela de aparelhos vira cartões — mesmos dados e mesmas
+   ações, um cartão por aparelho, com o rótulo de cada coluna antes do
+   valor. Desktop continua tabela. */
+@media (max-width: 650px) {
+    .tabela-container {
+        overflow-x: visible;
+    }
+
+    .tabela-container table,
+    .tabela-container tbody,
+    .tabela-container tr,
+    .tabela-container td {
+        display: block;
+        width: 100%;
+    }
+
+    .tabela-container thead {
+        display: none;
+    }
+
+    .tabela-container tr {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+    }
+
+    .tabela-container td {
+        border-bottom: 0;
+        padding: 3px 0;
+    }
+
+    .tabela-container td[data-label]::before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        color: #6b7280;
+        font-size: 12px;
+    }
+
+    .tabela-container .acoes {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+    }
+}

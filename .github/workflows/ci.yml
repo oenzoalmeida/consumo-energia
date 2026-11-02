@@ -75,6 +75,9 @@ jobs:
       - name: Forced change E2E
         working-directory: backend
         run: node e2e-forced-change.test.mjs
+      - name: Optimistic versioning integration tests
+        working-directory: backend
+        run: node --test versioning.integration.test.js
       - name: Reset rate limiter state
         working-directory: backend
         run: psql "$DATABASE_URL" -c "DELETE FROM auth_rate_limit"

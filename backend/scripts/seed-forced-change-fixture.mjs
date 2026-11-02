@@ -1,5 +1,5 @@
 // Fixture local/CI para o e2e-forced-change.test.mjs, SEM dump de producao.
-// Cria o schema base (users/user_data), aplica a migration 002 e insere os
+// Cria o schema base (users/user_data), aplica as migrations 002 e 003 e insere os
 // dois admins que o e2e espera. Idempotente (IF NOT EXISTS / ON CONFLICT).
 import { readFileSync } from 'node:fs';
 import crypto from 'node:crypto';
@@ -31,8 +31,10 @@ await pool.query(`
   );
 `);
 
-const migration = readFileSync(new URL('../migrations/002_forced_password_change.sql', import.meta.url), 'utf8');
-await pool.query(migration);
+for (const file of ['002_forced_password_change.sql', '003_user_data_version.sql']) {
+  const migration = readFileSync(new URL('../migrations/' + file, import.meta.url), 'utf8');
+  await pool.query(migration);
+}
 
 const admin = hashPassword('TempAdmin#2026');
 const velho = hashPassword('TempVelho#2026');
