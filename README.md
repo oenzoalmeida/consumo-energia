@@ -117,7 +117,7 @@ Após confirmar o funcionamento, mantenha apenas as origens ainda utilizadas. As
 
 Sem verificação de e-mail e sem recuperação de senha.
 
-Sem rate limiting nas rotas de autenticação.
+As rotas de autenticação têm limitação de tentativas persistida em PostgreSQL.
 
 A simulação mantém um único cenário por usuário (sem histórico).
 
@@ -128,3 +128,7 @@ Os cálculos são **estimativas** baseadas na potência nominal informada e na t
 ## Autor
 
 Enzo Almeida
+
+### Gravação segura do cenário
+
+A leitura inicial não dispara gravação. Se ela falhar, a edição fica bloqueada até uma nova leitura bem-sucedida. Falhas ao salvar ficam visíveis, mantêm o rascunho na tela e oferecem nova tentativa. Os envios são serializados para que uma resposta lenta não grave um cenário anterior por cima de uma edição nova nesta aba. Concorrência entre abas ainda exige controle de versão no servidor.
