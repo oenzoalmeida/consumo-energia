@@ -115,14 +115,33 @@ app.post('/api/auth/login', async (req,res) => {
 app.post('/api/auth/logout', (_req,res)=>res.clearCookie('energy_session', cookie).status(204).end());
 app.get('/api/auth/me', auth, (req,res)=>res.json({user:safe(req.user)}));
 
+// Versionamento otimista (migration 003): o GET devolve a versão atual e o PUT
+// só grava se a versão em que o cliente se baseou ainda for a vigente. Versão
+// ausente é 400 (cliente antigo precisa recarregar); versão defasada é 409 com
+// a versão atual, para a tela oferecer escolha explícita em vez de sobrescrever
+// em silêncio o que outra aba/dispositivo salvou.
 app.get('/api/data', auth, passwordChanged, async (req,res)=>{
-  const { rows } = await pool.query('SELECT data FROM user_data WHERE user_id=$1',[req.user.id]);
-  res.json({ data: rows[0]?.data || {} });
+  const { rows } = await pool.query('SELECT data, version FROM user_data WHERE user_id=$1',[req.user.id]);
+  res.json({ data: rows[0]?.data || {}, version: rows[0]?.version ?? 0 });
 });
 app.put('/api/data', auth, passwordChanged, async (req,res)=>{
   const data = req.body.data && typeof req.body.data === 'object' ? req.body.data : {};
-  await pool.query("INSERT INTO user_data(user_id,data) VALUES($1,$2::jsonb) ON CONFLICT(user_id) DO UPDATE SET data=EXCLUDED.data, updated_at=NOW()", [req.user.id, JSON.stringify(data)]);
-  res.status(204).end();
+  const baseVersion = req.body.baseVersion;
+  if (!Number.isInteger(baseVersion) || baseVersion < 0) {
+    return res.status(400).json({ error: 'Versão do cenário ausente; recarregue a página antes de salvar' });
+  }
+  const rows = baseVersion === 0
+    ? (await pool.query(
+        "INSERT INTO user_data(user_id,data,version) VALUES($1,$2::jsonb,1) ON CONFLICT(user_id) DO NOTHING RETURNING version",
+        [req.user.id, JSON.stringify(data)])).rows
+    : (await pool.query(
+        "UPDATE user_data SET data=$2::jsonb, version=version+1, updated_at=NOW() WHERE user_id=$1 AND version=$3 RETURNING version",
+        [req.user.id, JSON.stringify(data), baseVersion])).rows;
+  if (!rows[0]) {
+    const { rows: current } = await pool.query('SELECT version FROM user_data WHERE user_id=$1', [req.user.id]);
+    return res.status(409).json({ error: 'CONFLITO_VERSAO', version: current[0]?.version ?? 0 });
+  }
+  res.json({ version: rows[0].version });
 });
 
 app.delete('/api/account', auth, passwordChanged, async (req,res)=>{
