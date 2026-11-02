@@ -171,3 +171,39 @@ describe('fluxo completo de um aparelho', () => {
     assert.equal(calc.classificarConsumo(consumo).texto, 'Moderado');
   });
 });
+
+// Cenário econômico e exportação da estimativa (calc.js puro).
+test('simularCenarioEconomico reduz horas e recalcula consumo sem tocar o original', () => {
+  const original = [{ nome: 'Geladeira', potencia: 150, horas: 8, dias: 30, consumo: 36, custo: 36 }];
+  const sim = calc.simularCenarioEconomico(original, 25);
+  assert.equal(sim[0].horas, 6);
+  assert.equal(sim[0].consumo, 27);
+  assert.equal(original[0].horas, 8);
+  assert.equal(original[0].consumo, 36);
+});
+
+test('simularCenarioEconomico rejeita percentuais fora de 1-99', () => {
+  for (const p of [0, -5, 100, 150, NaN, 'abc']) {
+    assert.throws(() => calc.simularCenarioEconomico([], p), /entre 1 e 99/);
+  }
+});
+
+test('resumoCenario consolida consumo e custos mensal/anual', () => {
+  const aparelhos = [
+    { consumo: 36 }, { consumo: 14 },
+  ];
+  const r = calc.resumoCenario(aparelhos, 1.2);
+  assert.equal(r.consumoKwh, 50);
+  assert.ok(Math.abs(r.custoMes - 60) < 1e-9);
+  assert.ok(Math.abs(r.custoAno - 720) < 1e-9);
+});
+
+test('gerarCsvEstimativa inclui premissas, aviso, linhas e totais', () => {
+  const aparelhos = [{ nome: 'Ar; condicionado', potencia: 1000, horas: 5, dias: 30, consumo: 150, custo: 150 }];
+  const csv = calc.gerarCsvEstimativa({ aparelhos, tarifa: 1, percentualReducao: 20, geradoEm: '2026-11-02T00:00:00.000Z' });
+  assert.match(csv, /tarifa de R\$ 1,00 por kWh/);
+  assert.match(csv, /não a previsão exata da fatura/);
+  assert.match(csv, /"Ar; condicionado";1000;5,00;30;150,00;120,00;150,00;120,00/);
+  assert.match(csv, /TOTAL;;;;150,00;120,00;150,00;120,00/);
+  assert.match(csv, /economia estimada R\$ 360,00/);
+});
