@@ -35,8 +35,8 @@ const rateLimit = createAuthRateLimit(pool, {
 });
 app.use('/api/auth/login', rateLimit);
 app.use('/api/auth/register', rateLimit);
-const sign = user => jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-const safe = u => ({ id: String(u.id), name: u.name, email: u.email, role: u.role, active: u.active });
+const sign = user => jwt.sign({ id: user.id, role: user.role, av: user.auth_version ?? 1 }, JWT_SECRET, { expiresIn: '7d' });
+const safe = u => ({ id: String(u.id), name: u.name, email: u.email, role: u.role, active: u.active, mustChange: Boolean(u.must_change_password) });
 
 function hashPassword(password, salt = crypto.randomBytes(16).toString('hex')) {
   const hash = crypto.scryptSync(password, Buffer.from(salt, 'hex'), 64).toString('hex');
@@ -54,13 +54,40 @@ async function auth(req, res, next) {
     const token = req.cookies.energy_session;
     if (!token) return res.status(401).json({ error: 'Não autenticado' });
     const payload = jwt.verify(token, JWT_SECRET);
-    const { rows } = await pool.query('SELECT id,name,email,role,active FROM users WHERE id=$1', [payload.id]);
+    const { rows } = await pool.query('SELECT id,name,email,role,active,must_change_password,auth_version FROM users WHERE id=$1', [payload.id]);
     const user = rows[0];
     if (!user || !user.active) return res.status(401).json({ error: 'Acesso indisponível' });
+    if (payload.av !== undefined && payload.av !== user.auth_version) return res.status(401).json({ error: 'Sessão expirada' });
     req.user = user; next();
   } catch { return res.status(401).json({ error: 'Sessão inválida' }); }
 }
 function admin(req, res, next) { return req.user?.role === 'ADMIN' ? next() : res.status(403).json({ error: 'Acesso restrito' }); }
+
+// Com senha temporária (must_change_password), o backend só responde
+// /api/auth/me, /api/auth/change-password e /api/auth/logout. Todo o resto
+// retorna 403 MUST_CHANGE_PASSWORD — o bloqueio é de servidor, não de tela.
+function passwordChanged(req, res, next) {
+  return req.user?.must_change_password
+    ? res.status(403).json({ error: 'MUST_CHANGE_PASSWORD' })
+    : next();
+}
+
+const PASSWORD_MIN = 12;
+app.post('/api/auth/change-password', auth, async (req, res) => {
+  const current = String(req.body.current_password || '');
+  const next_ = String(req.body.new_password || '');
+  if (next_.length < PASSWORD_MIN) return res.status(400).json({ error: `A nova senha precisa de pelo menos ${PASSWORD_MIN} caracteres` });
+  if (next_ === current) return res.status(400).json({ error: 'A nova senha precisa ser diferente da atual' });
+  try {
+    const { rows } = await pool.query('SELECT password_hash FROM users WHERE id=$1', [req.user.id]);
+    if (!rows[0] || !verifyPassword(current, rows[0].password_hash)) return res.status(401).json({ error: 'Senha atual incorreta' });
+    const { rows: updated } = await pool.query(
+      'UPDATE users SET password_hash=$1, must_change_password=false, auth_version=auth_version+1 WHERE id=$2 RETURNING id,name,email,role,active,must_change_password,auth_version',
+      [hashPassword(next_), req.user.id]);
+    const user = updated[0];
+    res.cookie('energy_session', sign(user), cookie).json({ user: safe(user) });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'Erro interno' }); }
+});
 
 app.get('/api/internal/maintenance/rate-limits', createRateLimitCleanup(pool));
 
@@ -88,30 +115,37 @@ app.post('/api/auth/login', async (req,res) => {
 app.post('/api/auth/logout', (_req,res)=>res.clearCookie('energy_session', cookie).status(204).end());
 app.get('/api/auth/me', auth, (req,res)=>res.json({user:safe(req.user)}));
 
-app.get('/api/data', auth, async (req,res)=>{
+app.get('/api/data', auth, passwordChanged, async (req,res)=>{
   const { rows } = await pool.query('SELECT data FROM user_data WHERE user_id=$1',[req.user.id]);
   res.json({ data: rows[0]?.data || {} });
 });
-app.put('/api/data', auth, async (req,res)=>{
+app.put('/api/data', auth, passwordChanged, async (req,res)=>{
   const data = req.body.data && typeof req.body.data === 'object' ? req.body.data : {};
   await pool.query("INSERT INTO user_data(user_id,data) VALUES($1,$2::jsonb) ON CONFLICT(user_id) DO UPDATE SET data=EXCLUDED.data, updated_at=NOW()", [req.user.id, JSON.stringify(data)]);
   res.status(204).end();
 });
 
-app.delete('/api/account', auth, async (req,res)=>{
+app.delete('/api/account', auth, passwordChanged, async (req,res)=>{
   await pool.query('DELETE FROM user_data WHERE user_id=$1',[req.user.id]);
   await pool.query('DELETE FROM users WHERE id=$1',[req.user.id]);
   res.clearCookie('energy_session', cookie).status(204).end();
 });
 
-app.get('/api/admin/users', auth, admin, async (_req,res)=>{
+app.get('/api/admin/users', auth, passwordChanged, admin, async (_req,res)=>{
   const { rows } = await pool.query("SELECT u.id,u.name,u.email,u.role,u.active,u.created_at, CASE WHEN d.user_id IS NULL THEN false ELSE true END AS has_data FROM users u LEFT JOIN user_data d ON d.user_id=u.id ORDER BY u.created_at DESC");
   res.json({ users: rows.map(safe) });
 });
-app.patch('/api/admin/users/:id', auth, admin, async (req,res)=>{
+app.patch('/api/admin/users/:id', auth, passwordChanged, admin, async (req,res)=>{
   const active = Boolean(req.body.active);
   if (String(req.params.id) === String(req.user.id) && !active) return res.status(400).json({error:'Você não pode desativar sua própria conta'});
-  const { rows } = await pool.query('UPDATE users SET active=$1 WHERE id=$2 RETURNING id,name,email,role,active',[active,req.params.id]);
+  if (!active) {
+    const { rows: target } = await pool.query('SELECT role FROM users WHERE id=$1', [req.params.id]);
+    if (target[0]?.role === 'ADMIN') {
+      const { rows: others } = await pool.query("SELECT count(*)::int AS n FROM users WHERE role='ADMIN' AND active AND id<>$1", [req.params.id]);
+      if (others[0].n === 0) return res.status(400).json({error:'Não é possível desativar o último administrador ativo'});
+    }
+  }
+  const { rows } = await pool.query('UPDATE users SET active=$1 WHERE id=$2 RETURNING id,name,email,role,active,must_change_password,auth_version',[active,req.params.id]);
   if (!rows[0]) return res.status(404).json({error:'Usuário não encontrado'});
   res.json({user:safe(rows[0])});
 });

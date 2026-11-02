@@ -69,6 +69,15 @@ jobs:
         run: psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f migrations/001_auth_rate_limit.sql
       - name: PostgreSQL limiter integration tests
         run: node --test security.integration.test.js
+      - name: Seed forced-change fixture (schema + migration 002, sem dump)
+        working-directory: backend
+        run: node scripts/seed-forced-change-fixture.mjs
+      - name: Forced change E2E
+        working-directory: backend
+        run: node e2e-forced-change.test.mjs
+      - name: Reset rate limiter state
+        working-directory: backend
+        run: psql "$DATABASE_URL" -c "DELETE FROM auth_rate_limit"
       - name: Syntax check
         run: node --check server.js
       - name: Start server and smoke test /health
