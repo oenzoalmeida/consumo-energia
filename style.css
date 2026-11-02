@@ -748,3 +748,50 @@ footer {
         font-size: 13px;
     }
 }
+
+/* Celular: a tabela de aparelhos vira cartões — mesmos dados e mesmas
+   ações, um cartão por aparelho, com o rótulo de cada coluna antes do
+   valor. Desktop continua tabela. */
+@media (max-width: 650px) {
+    .tabela-container {
+        overflow-x: visible;
+    }
+
+    .tabela-container table,
+    .tabela-container tbody,
+    .tabela-container tr,
+    .tabela-container td {
+        display: block;
+        width: 100%;
+    }
+
+    .tabela-container thead {
+        display: none;
+    }
+
+    .tabela-container tr {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+    }
+
+    .tabela-container td {
+        border-bottom: 0;
+        padding: 3px 0;
+    }
+
+    .tabela-container td[data-label]::before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        color: #6b7280;
+        font-size: 12px;
+    }
+
+    .tabela-container .acoes {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+    }
+}
