@@ -314,6 +314,41 @@
     </section>
 
 
+    <section id="comparacao">
+
+        <div class="titulo-section">
+
+            <div>
+                <h2>Comparar com cenário econômico</h2>
+
+                <p>
+                    Simule uma redução no uso e compare os dois cenários.
+                    A tarifa e os usos cadastrados são premissas suas: o
+                    resultado é uma estimativa, não a previsão exata da fatura.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="controles-comparacao">
+            <label for="percentual-economia">Redução de uso simulada (%)</label>
+            <input
+                    id="percentual-economia"
+                    type="number"
+                    min="1"
+                    max="99"
+                    step="1"
+                    value="20"
+            >
+            <button id="botao-comparar" type="button">Comparar cenários</button>
+            <button id="botao-exportar" type="button">Exportar estimativa (CSV)</button>
+        </div>
+
+        <div id="resultado-comparacao" role="status" aria-live="polite"></div>
+
+    </section>
+
+
     <section>
 
         <div class="titulo-section">
