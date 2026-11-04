@@ -63,20 +63,20 @@
         <div class="tarifa">
 
             <label for="tarifa">
-                Tarifa estimada (R$/kWh)
+                Preço da energia (R$ por kWh)
             </label>
 
             <input
                     type="number"
                     id="tarifa"
+                    aria-describedby="ajuda-tarifa"
                     min="0.01"
                     step="0.01"
                     value="1.00"
             >
 
-            <small>
-                Para uma estimativa mais próxima da realidade,
-                consulte o valor médio do kWh na sua conta de energia.
+            <small id="ajuda-tarifa">
+                Consulte o preço do kWh na sua conta de luz. kWh é a unidade usada para medir a energia consumida. O valor informado serve apenas para estimar o custo.
             </small>
 
         </div>
@@ -126,16 +126,18 @@
             <div class="campo">
 
                 <label for="potencia">
-                    Potência (W)
+                    Potência do aparelho (watts)
                 </label>
 
                 <input
                         type="number"
                         id="potencia"
+                        aria-describedby="ajuda-potencia"
                         min="1"
                         placeholder="Ex.: 1500"
                         required
                 >
+                <small id="ajuda-potencia">Veja a potência em watts (W) na etiqueta do aparelho ou no manual.</small>
 
             </div>
 
@@ -319,7 +321,7 @@
         <div class="titulo-section">
 
             <div>
-                <h2>Comparar com cenário econômico</h2>
+                <h2>Quanto você poderia economizar?</h2>
 
                 <p>
                     Simule uma redução no uso e compare os dois cenários.
@@ -331,7 +333,7 @@
         </div>
 
         <div class="controles-comparacao">
-            <label for="percentual-economia">Redução de uso simulada (%)</label>
+            <label for="percentual-economia">Quanto você pretende reduzir o uso? (%)</label>
             <input
                     id="percentual-economia"
                     type="number"
