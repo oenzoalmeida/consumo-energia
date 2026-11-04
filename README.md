@@ -74,7 +74,7 @@ Frontend: abra `index.html` via um servidor estático local. A URL da API é def
 
 ## Testes
 
-O CI verifica a sintaxe dos arquivos JavaScript (`node --check`) e a integridade dos arquivos essenciais. Não há suíte de testes automatizados funcionais.
+O CI executa testes automatizados das regras de cálculo do frontend e, no backend com PostgreSQL 16, testes de segurança, limitador de autenticação, troca obrigatória de senha e versionamento otimista. Também verifica sintaxe, arquivos essenciais e smoke tests de saúde, rate limit e CORS. A cobertura existente não equivale a uma validação completa de todas as telas em navegadores reais.
 
 ## Deploy
 
