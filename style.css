@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500;700&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -887,4 +888,228 @@ button:active {
     button:active {
         transform: none;
     }
+}
+
+/* ==========================================================================
+   REDESIGN "VOLT" - direção visual escolhida
+   Escuro de painel elétrico + verde-volt, Sora nos textos, IBM Plex Mono
+   nos números. Apenas CSS: nenhuma lógica alterada.
+   ========================================================================== */
+body {
+    background: #0C0F0A;
+    color: #EDF3DF;
+    font-family: 'Sora', system-ui, sans-serif;
+}
+::selection { background: #C6F52E; color: #131806; }
+
+.cabecalho {
+    background: #0C0F0A;
+    border-bottom: 1px solid #232B16;
+    padding: 68px 0 56px;
+    position: relative;
+}
+.cabecalho::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: -1px;
+    height: 3px;
+    background: linear-gradient(90deg, #C6F52E 0%, #C6F52E 22%, transparent 22%);
+}
+.versao {
+    background: transparent;
+    color: #C6F52E;
+    border: 1px solid #3A4A1C;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+}
+.cabecalho h1 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    font-size: clamp(2.3rem, 6vw, 3.9rem);
+    line-height: 1.02;
+    color: #F4F9E8;
+}
+.cabecalho h1::after {
+    content: "";
+    display: block;
+    width: 74px; height: 8px; margin-top: 14px;
+    background: repeating-linear-gradient(90deg, #C6F52E 0 10px, transparent 10px 15px);
+}
+.cabecalho p { color: #9AA78C; }
+
+main section,
+.configuracao,
+section {
+    background: #12170D;
+    border: 1px solid #232B16;
+    border-radius: 14px;
+    box-shadow: none;
+}
+section h2,
+.titulo-section {
+    color: #F4F9E8;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+section h2::before {
+    content: "//";
+    color: #C6F52E;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-right: 10px;
+}
+section p { color: #9AA78C; }
+
+.tarifa label,
+.campo label {
+    color: #C9D6B2;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .82rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+}
+.tarifa small, .campo small { color: #7E8C6C; }
+
+input {
+    background: #0C0F0A;
+    border: 1px solid #2C3618;
+    color: #F4F9E8;
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+}
+input:focus {
+    border-color: #C6F52E;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(198, 245, 46, .18);
+}
+
+button {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    border-radius: 8px;
+}
+#botao-salvar,
+button[type="submit"],
+.botoes-formulario button:first-child {
+    background: #C6F52E;
+    color: #131806;
+    border: 1px solid #C6F52E;
+    box-shadow: 4px 4px 0 rgba(198, 245, 46, .22);
+}
+#botao-salvar:hover,
+button[type="submit"]:hover { background: #D7FF5C; }
+
+.botao-secundario {
+    background: transparent;
+    border: 1px solid #2C3618;
+    color: #EDF3DF;
+}
+.botao-secundario:hover { border-color: #C6F52E; color: #C6F52E; background: transparent; }
+
+.botao-perigo,
+.botao-excluir {
+    background: #2A1210;
+    border: 1px solid #5A2320;
+    color: #FF8A7A;
+}
+.botao-perigo:hover,
+.botao-excluir:hover { background: #3A1714; color: #FFA595; }
+
+.botao-editar {
+    background: transparent;
+    border: 1px solid #3A4A1C;
+    color: #C6F52E;
+}
+.botao-editar:hover { background: #171E0E; }
+
+.card {
+    background: #0C0F0A;
+    border: 1px solid #232B16;
+    border-radius: 12px;
+    box-shadow: none;
+}
+.card span { color: #9AA78C; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; font-size: .78rem; letter-spacing: .08em; }
+.card strong { color: #C6F52E; font-family: 'IBM Plex Mono', monospace; }
+
+.destaque {
+    background: #1A220F;
+    border: 1px solid #3A4A1C;
+    border-left: 3px solid #C6F52E;
+    border-radius: 10px;
+    color: #EDF3DF;
+}
+.destaque strong, .destaque b { color: #C6F52E; font-family: 'IBM Plex Mono', monospace; }
+#botao-comparar {
+    background: #C6F52E;
+    color: #131806;
+    border: 1px solid #C6F52E;
+    box-shadow: 4px 4px 0 rgba(198, 245, 46, .22);
+}
+#botao-comparar:hover { background: #D7FF5C; }
+#botao-exportar {
+    background: transparent;
+    border: 1px solid #2C3618;
+    color: #EDF3DF;
+}
+#botao-exportar:hover { border-color: #C6F52E; color: #C6F52E; }
+.controles-comparacao label { color: #C9D6B2; }
+.controles-comparacao input {
+    background: #0C0F0A;
+    border: 1px solid #2C3618;
+    color: #F4F9E8;
+}
+#resultado-comparacao {
+    background: #12170D;
+    border: 1px solid #232B16;
+    color: #EDF3DF;
+}
+.destaque-vazio,
+.grafico-vazio { color: #7E8C6C; }
+
+.barra-fundo { background: #1B2210; border-radius: 4px; }
+.barra-consumo {
+    background: linear-gradient(90deg, #9CD41F, #C6F52E);
+    border-radius: 4px;
+    box-shadow: 0 0 14px rgba(198, 245, 46, .35);
+}
+.nome-grafico { color: #C9D6B2; }
+.valor-grafico { color: #C6F52E; font-family: 'IBM Plex Mono', monospace; }
+
+.tabela-container { border: 1px solid #232B16; border-radius: 12px; }
+table { color: #EDF3DF; }
+th {
+    color: #9AA78C;
+    font-family: 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    font-size: .76rem;
+    letter-spacing: .1em;
+    border-bottom: 1px solid #2C3618;
+}
+td { border-bottom: 1px solid #1B2210; }
+tr:hover td { background: #151B0E; }
+
+footer, .rodape { background: #0C0F0A; border-top: 1px solid #232B16; color: #7E8C6C; }
+.destaque p, .destaque small, .destaque span { color: #C9D6B2 !important; }
+thead tr, thead th { background: #0C0F0A !important; }
+/* Pílula de conta (injetada pelo auth.js) no tema Volt */
+.energy-account {
+    background: #12170D !important;
+    border: 1px solid #2C3618 !important;
+    box-shadow: none !important;
+    color: #EDF3DF;
+}
+.energy-account button {
+    background: transparent !important;
+    color: #EDF3DF !important;
+    border: 1px solid #2C3618 !important;
+    border-radius: 999px !important;
+}
+.energy-account button.energy-del {
+    color: #FF8A7A !important;
+    border-color: #5A2320 !important;
 }
