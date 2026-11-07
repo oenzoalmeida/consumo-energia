@@ -795,3 +795,96 @@ footer {
         margin-top: 6px;
     }
 }
+
+/* ------------------------------------------------------------------
+   Polimento de interface e movimento (referência de design: diretrizes
+   de interface da Apple / HIG e palestras de "fluid interfaces" da WWDC,
+   traduzidas para a web). Só refinamento: identidade visual, layout e
+   funcionalidades não mudam.
+------------------------------------------------------------------- */
+
+/* Tipografia: fonte do sistema primeiro (já traz ajuste ótico) */
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
+}
+
+/* Hierarquia por peso e tamanho: títulos grandes com tracking e leading apertados */
+.cabecalho h1,
+section h2 {
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+/* Números tabulares em valores monetários e tabelas (colunas estáveis) */
+.tarifa,
+table,
+#resultado-comparacao {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Foco de teclado visível (antes: outline removido e sombra quase invisível) */
+:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+}
+
+input:focus-visible {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+
+/* Borda dos campos com contraste mínimo 3:1 sobre o fundo (era #d1d5db, 1.4:1) */
+input {
+    border-color: #7d8ca3;
+}
+
+/* Alvos de toque de 44px e resposta imediata ao toque (só transform/opacity) */
+button {
+    min-height: 44px;
+    transition: background-color 160ms ease, transform 100ms ease-out;
+}
+
+button:active {
+    transform: scale(0.97);
+    transition-duration: 60ms;
+}
+
+.botao-editar,
+.botao-excluir {
+    min-height: 36px;
+}
+
+/* Link "pular para o conteúdo" (visível só com foco de teclado) */
+.pular-para-conteudo {
+    position: absolute;
+    left: 16px;
+    top: -56px;
+    z-index: 100;
+    background: #111827;
+    color: #ffffff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: top 160ms ease;
+}
+
+.pular-para-conteudo:focus-visible {
+    top: 12px;
+    color: #ffffff;
+}
+
+/* Movimento reduzido: vira transição instantânea, sem perder a mudança de estado */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    button:active {
+        transform: none;
+    }
+}
