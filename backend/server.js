@@ -6,7 +6,9 @@ import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import pg from 'pg';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import path from 'node:path';
+import { csrfOriginReferer } from './csrf-origin.js';
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -26,8 +28,10 @@ app.set('trust proxy', proxyHops());
 app.use(cors({ origin: FRONTEND_ORIGINS.length > 1 ? FRONTEND_ORIGINS : FRONTEND_URL, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
+app.use(csrfOriginReferer({ cookieName: 'energy_session', allowedOrigins: FRONTEND_ORIGINS }));
 
-const cookie = { httpOnly: true, secure: true, sameSite: 'none', path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 };
+// Interface e API na mesma origem: cookie first-party (funciona no Safari).
+const cookie = { httpOnly: true, secure: true, sameSite: 'lax', path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 };
 
 const rateLimit = createAuthRateLimit(pool, {
   max: positiveInteger(process.env.RATE_LIMIT_PER_MINUTE, 10, 'RATE_LIMIT_PER_MINUTE'),
@@ -167,6 +171,24 @@ app.patch('/api/admin/users/:id', auth, passwordChanged, admin, async (req,res)=
   const { rows } = await pool.query('UPDATE users SET active=$1 WHERE id=$2 RETURNING id,name,email,role,active,must_change_password,auth_version',[active,req.params.id]);
   if (!rows[0]) return res.status(404).json({error:'Usuário não encontrado'});
   res.json({user:safe(rows[0])});
+});
+
+// Interface web servida pela mesma origem da API (cookies first-party, HttpOnly
+// + verificação de Origin). Safari bloqueia cookies entre domínios diferentes.
+const publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'public');
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
+app.use(express.static(publicDir, {
+  setHeaders(res, file) {
+    if (/\.(html|js|css)$/.test(file)) res.setHeader('Cache-Control', 'max-age=0, must-revalidate');
+  }
+}));
+app.use((req, res, next) => {
+  if (req.method !== 'GET' || req.path.startsWith('/api/') || req.path === '/health') return next();
+  res.status(404).sendFile(path.join(publicDir, '404.html'));
 });
 
 app.use((err,_req,res,_next)=>{ console.error(err); res.status(500).json({error:'Erro interno'}); });

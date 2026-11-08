@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 
-Sitemap: https://consumo-energia-2.web.app/sitemap.xml
+Sitemap: https://consumo-energia-backend.vercel.app/sitemap.xml

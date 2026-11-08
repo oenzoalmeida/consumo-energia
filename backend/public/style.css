@@ -1,0 +1,1115 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f3f5f7;
+
+    color: #1f2937;
+
+    line-height: 1.5;
+}
+
+
+.container {
+    width: 90%;
+
+    max-width: 1150px;
+
+    margin: 0 auto;
+}
+
+
+/* Cabeçalho */
+
+.cabecalho {
+    background:
+            linear-gradient(
+                    135deg,
+                    #111827,
+                    #1f2937
+            );
+
+    color: white;
+
+    padding: 46px 0;
+}
+
+
+.cabecalho-conteudo {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+
+.versao {
+    display: inline-block;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    margin-bottom: 10px;
+}
+
+
+.cabecalho h1 {
+    font-size: 34px;
+
+    margin-bottom: 6px;
+}
+
+
+.cabecalho p {
+    max-width: 650px;
+
+    color: #cbd5e1;
+
+    font-size: 15px;
+}
+
+
+/* Conteúdo */
+
+main {
+    padding: 30px 0;
+}
+
+
+section {
+    background: white;
+
+    padding: 24px;
+
+    margin-bottom: 22px;
+
+    border:
+            1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    box-shadow:
+            0 2px 8px
+            rgba(0, 0, 0, 0.04);
+}
+
+
+section h2 {
+    font-size: 21px;
+
+    margin-bottom: 3px;
+}
+
+
+section p {
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* Configuração */
+
+.configuracao {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+
+.tarifa {
+    width: 230px;
+}
+
+
+.tarifa label {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-bottom: 6px;
+}
+
+
+.tarifa small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    line-height: 1.4;
+}
+
+
+/* Formulário */
+
+form {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 18px;
+
+    margin-top: 20px;
+}
+
+
+.campo {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.campo label {
+    font-size: 14px;
+
+    font-weight: bold;
+
+    margin-bottom: 6px;
+}
+
+
+input {
+    width: 100%;
+
+    padding: 11px;
+
+    border:
+            1px solid #d1d5db;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+
+    background: white;
+}
+
+
+input:focus {
+    outline: none;
+
+    border-color: #2563eb;
+
+    box-shadow:
+            0 0 0 2px
+            rgba(37, 99, 235, 0.08);
+}
+
+
+/* Botões */
+
+button {
+    border: none;
+
+    border-radius: 6px;
+
+    padding: 11px 16px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.botoes-formulario {
+    grid-column: span 2;
+
+    display: flex;
+
+    gap: 10px;
+}
+
+
+#botao-salvar {
+    background: #2563eb;
+
+    color: white;
+}
+
+
+#botao-salvar:hover {
+    background: #1d4ed8;
+}
+
+
+.botao-secundario {
+    background: #e5e7eb;
+
+    color: #374151;
+}
+
+
+.botao-secundario:hover {
+    background: #d1d5db;
+}
+
+
+.botao-perigo {
+    background: #dc2626;
+
+    color: white;
+}
+
+
+.botao-perigo:hover {
+    background: #b91c1c;
+}
+
+
+.botao-editar {
+    background: #b45309;
+
+    color: white;
+
+    padding: 7px 10px;
+}
+
+
+.botao-editar:hover {
+    background: #92400e;
+}
+
+
+.botao-excluir {
+    background: #dc2626;
+
+    color: white;
+
+    padding: 7px 10px;
+}
+
+
+.botao-excluir:hover {
+    background: #b91c1c;
+}
+
+
+/* Títulos */
+
+.titulo-section {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+/* Cards */
+
+.cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-top: 20px;
+}
+
+
+.card {
+    background: #f9fafb;
+
+    border:
+            1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    padding: 18px;
+}
+
+
+.card span {
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    margin-bottom: 7px;
+}
+
+
+.card strong {
+    font-size: 21px;
+}
+
+
+/* Análise */
+
+.destaque-vazio {
+    margin-top: 15px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+.destaque {
+    margin-top: 15px;
+
+    background: #eff6ff;
+
+    border-left:
+            4px solid #2563eb;
+
+    border-radius: 6px;
+
+    padding: 16px;
+}
+
+
+.destaque strong {
+    display: block;
+
+    margin-bottom: 4px;
+}
+
+
+.destaque span {
+    color: #4b5563;
+
+    font-size: 14px;
+}
+
+
+/* Gráfico */
+
+.grafico {
+    margin-top: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+.grafico-vazio {
+    text-align: center;
+
+    padding: 20px;
+}
+
+
+.item-grafico {
+    display: grid;
+
+    grid-template-columns:
+        180px 1fr 110px;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+
+.nome-grafico {
+    font-size: 14px;
+
+    font-weight: bold;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.barra-fundo {
+    width: 100%;
+
+    height: 12px;
+
+    background: #e5e7eb;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+.barra-consumo {
+    height: 100%;
+
+    background: #2563eb;
+
+    border-radius: 20px;
+
+    min-width: 4px;
+}
+
+
+.valor-grafico {
+    text-align: right;
+
+    font-size: 13px;
+
+    color: #4b5563;
+}
+
+
+/* Classificação */
+
+.nivel {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+
+.nivel-baixo {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.nivel-moderado {
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+
+.nivel-alto {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+/* Tabela */
+
+.tabela-container {
+    overflow-x: auto;
+
+    margin-top: 20px;
+}
+
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+
+th,
+td {
+    padding: 12px;
+
+    text-align: left;
+
+    border-bottom:
+            1px solid #e5e7eb;
+}
+
+
+th {
+    background: #f3f4f6;
+
+    color: #374151;
+
+    font-size: 13px;
+}
+
+
+td {
+    font-size: 14px;
+}
+
+
+tbody tr:hover {
+    background: #f9fafb;
+}
+
+
+.acoes {
+    display: flex;
+
+    gap: 6px;
+}
+
+
+#mensagem-vazia {
+    text-align: center;
+
+    padding: 25px;
+}
+
+
+/* Utilidades */
+
+.oculto {
+    display: none;
+}
+
+
+/* Rodapé */
+
+footer {
+    text-align: center;
+
+    padding: 24px;
+
+    color: #69707d;
+
+    font-size: 13px;
+}
+
+
+/* Responsividade */
+
+@media (max-width: 900px) {
+
+    .cards {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .item-grafico {
+        grid-template-columns:
+            140px 1fr 90px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .cabecalho {
+        padding: 35px 0;
+    }
+
+
+    .cabecalho h1 {
+        font-size: 28px;
+    }
+
+
+    .configuracao,
+    .titulo-section {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+
+    .botoes-formulario {
+        grid-column: span 1;
+
+        width: 100%;
+
+        flex-direction: column;
+    }
+
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+
+    .tarifa {
+        width: 100%;
+    }
+
+
+    .item-grafico {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+
+    .valor-grafico {
+        text-align: left;
+    }
+
+}
+
+/* Comparação de cenários */
+.controles-comparacao {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.controles-comparacao label {
+    font-weight: 600;
+    color: #334155;
+    font-size: 14px;
+}
+
+.controles-comparacao input {
+    width: 90px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font: inherit;
+}
+
+.controles-comparacao button {
+    border: 0;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #1d4ed8;
+    color: #fff;
+}
+
+.controles-comparacao button + button {
+    background: #eef3f8;
+    color: #1d4ed8;
+}
+
+.tabela-comparacao {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+}
+
+.tabela-comparacao th,
+.tabela-comparacao td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+
+.premissas-comparacao {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+@media (max-width: 640px) {
+    .controles-comparacao {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controles-comparacao input {
+        width: 100%;
+    }
+
+    .tabela-comparacao th,
+    .tabela-comparacao td {
+        padding: 6px 6px;
+        font-size: 13px;
+    }
+}
+
+/* Celular: a tabela de aparelhos vira cartões — mesmos dados e mesmas
+   ações, um cartão por aparelho, com o rótulo de cada coluna antes do
+   valor. Desktop continua tabela. */
+@media (max-width: 650px) {
+    .tabela-container {
+        overflow-x: visible;
+    }
+
+    .tabela-container table,
+    .tabela-container tbody,
+    .tabela-container tr,
+    .tabela-container td {
+        display: block;
+        width: 100%;
+    }
+
+    .tabela-container thead {
+        display: none;
+    }
+
+    .tabela-container tr {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+    }
+
+    .tabela-container td {
+        border-bottom: 0;
+        padding: 3px 0;
+    }
+
+    .tabela-container td[data-label]::before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        color: #6b7280;
+        font-size: 12px;
+    }
+
+    .tabela-container .acoes {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+    }
+}
+
+/* ------------------------------------------------------------------
+   Polimento de interface e movimento (referência de design: diretrizes
+   de interface da Apple / HIG e palestras de "fluid interfaces" da WWDC,
+   traduzidas para a web). Só refinamento: identidade visual, layout e
+   funcionalidades não mudam.
+------------------------------------------------------------------- */
+
+/* Tipografia: fonte do sistema primeiro (já traz ajuste ótico) */
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
+}
+
+/* Hierarquia por peso e tamanho: títulos grandes com tracking e leading apertados */
+.cabecalho h1,
+section h2 {
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+/* Números tabulares em valores monetários e tabelas (colunas estáveis) */
+.tarifa,
+table,
+#resultado-comparacao {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Foco de teclado visível (antes: outline removido e sombra quase invisível) */
+:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+}
+
+input:focus-visible {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+
+/* Borda dos campos com contraste mínimo 3:1 sobre o fundo (era #d1d5db, 1.4:1) */
+input {
+    border-color: #7d8ca3;
+}
+
+/* Alvos de toque de 44px e resposta imediata ao toque (só transform/opacity) */
+button {
+    min-height: 44px;
+    transition: background-color 160ms ease, transform 100ms ease-out;
+}
+
+button:active {
+    transform: scale(0.97);
+    transition-duration: 60ms;
+}
+
+.botao-editar,
+.botao-excluir {
+    min-height: 36px;
+}
+
+/* Link "pular para o conteúdo" (visível só com foco de teclado) */
+.pular-para-conteudo {
+    position: absolute;
+    left: 16px;
+    top: -56px;
+    z-index: 100;
+    background: #111827;
+    color: #ffffff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: top 160ms ease;
+}
+
+.pular-para-conteudo:focus-visible {
+    top: 12px;
+    color: #ffffff;
+}
+
+/* Movimento reduzido: vira transição instantânea, sem perder a mudança de estado */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    button:active {
+        transform: none;
+    }
+}
+
+/* ==========================================================================
+   REDESIGN "VOLT" - direção visual escolhida
+   Escuro de painel elétrico + verde-volt, Sora nos textos, IBM Plex Mono
+   nos números. Apenas CSS: nenhuma lógica alterada.
+   ========================================================================== */
+body {
+    background: #0C0F0A;
+    color: #EDF3DF;
+    font-family: 'Sora', system-ui, sans-serif;
+}
+::selection { background: #C6F52E; color: #131806; }
+
+.cabecalho {
+    background: #0C0F0A;
+    border-bottom: 1px solid #232B16;
+    padding: 68px 0 56px;
+    position: relative;
+}
+.cabecalho::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: -1px;
+    height: 3px;
+    background: linear-gradient(90deg, #C6F52E 0%, #C6F52E 22%, transparent 22%);
+}
+.versao {
+    background: transparent;
+    color: #C6F52E;
+    border: 1px solid #3A4A1C;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+}
+.cabecalho h1 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    font-size: clamp(2.3rem, 6vw, 3.9rem);
+    line-height: 1.02;
+    color: #F4F9E8;
+}
+.cabecalho h1::after {
+    content: "";
+    display: block;
+    width: 74px; height: 8px; margin-top: 14px;
+    background: repeating-linear-gradient(90deg, #C6F52E 0 10px, transparent 10px 15px);
+}
+.cabecalho p { color: #9AA78C; }
+
+main section,
+.configuracao,
+section {
+    background: #12170D;
+    border: 1px solid #232B16;
+    border-radius: 14px;
+    box-shadow: none;
+}
+section h2,
+.titulo-section {
+    color: #F4F9E8;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+section h2::before {
+    content: "//";
+    color: #C6F52E;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-right: 10px;
+}
+section p { color: #9AA78C; }
+
+.tarifa label,
+.campo label {
+    color: #C9D6B2;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .82rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+}
+.tarifa small, .campo small { color: #7E8C6C; }
+
+input {
+    background: #0C0F0A;
+    border: 1px solid #2C3618;
+    color: #F4F9E8;
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+}
+input:focus {
+    border-color: #C6F52E;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(198, 245, 46, .18);
+}
+
+button {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    border-radius: 8px;
+}
+#botao-salvar,
+button[type="submit"],
+.botoes-formulario button:first-child {
+    background: #C6F52E;
+    color: #131806;
+    border: 1px solid #C6F52E;
+    box-shadow: 4px 4px 0 rgba(198, 245, 46, .22);
+}
+#botao-salvar:hover,
+button[type="submit"]:hover { background: #D7FF5C; }
+
+.botao-secundario {
+    background: transparent;
+    border: 1px solid #2C3618;
+    color: #EDF3DF;
+}
+.botao-secundario:hover { border-color: #C6F52E; color: #C6F52E; background: transparent; }
+
+.botao-perigo,
+.botao-excluir {
+    background: #2A1210;
+    border: 1px solid #5A2320;
+    color: #FF8A7A;
+}
+.botao-perigo:hover,
+.botao-excluir:hover { background: #3A1714; color: #FFA595; }
+
+.botao-editar {
+    background: transparent;
+    border: 1px solid #3A4A1C;
+    color: #C6F52E;
+}
+.botao-editar:hover { background: #171E0E; }
+
+.card {
+    background: #0C0F0A;
+    border: 1px solid #232B16;
+    border-radius: 12px;
+    box-shadow: none;
+}
+.card span { color: #9AA78C; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; font-size: .78rem; letter-spacing: .08em; }
+.card strong { color: #C6F52E; font-family: 'IBM Plex Mono', monospace; }
+
+.destaque {
+    background: #1A220F;
+    border: 1px solid #3A4A1C;
+    border-left: 3px solid #C6F52E;
+    border-radius: 10px;
+    color: #EDF3DF;
+}
+.destaque strong, .destaque b { color: #C6F52E; font-family: 'IBM Plex Mono', monospace; }
+#botao-comparar {
+    background: #C6F52E;
+    color: #131806;
+    border: 1px solid #C6F52E;
+    box-shadow: 4px 4px 0 rgba(198, 245, 46, .22);
+}
+#botao-comparar:hover { background: #D7FF5C; }
+#botao-exportar {
+    background: transparent;
+    border: 1px solid #2C3618;
+    color: #EDF3DF;
+}
+#botao-exportar:hover { border-color: #C6F52E; color: #C6F52E; }
+.controles-comparacao label { color: #C9D6B2; }
+.controles-comparacao input {
+    background: #0C0F0A;
+    border: 1px solid #2C3618;
+    color: #F4F9E8;
+}
+#resultado-comparacao {
+    background: #12170D;
+    border: 1px solid #232B16;
+    color: #EDF3DF;
+}
+.destaque-vazio,
+.grafico-vazio { color: #7E8C6C; }
+
+.barra-fundo { background: #1B2210; border-radius: 4px; }
+.barra-consumo {
+    background: linear-gradient(90deg, #9CD41F, #C6F52E);
+    border-radius: 4px;
+    box-shadow: 0 0 14px rgba(198, 245, 46, .35);
+}
+.nome-grafico { color: #C9D6B2; }
+.valor-grafico { color: #C6F52E; font-family: 'IBM Plex Mono', monospace; }
+
+.tabela-container { border: 1px solid #232B16; border-radius: 12px; }
+table { color: #EDF3DF; }
+th {
+    color: #9AA78C;
+    font-family: 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    font-size: .76rem;
+    letter-spacing: .1em;
+    border-bottom: 1px solid #2C3618;
+}
+td { border-bottom: 1px solid #1B2210; }
+tr:hover td { background: #151B0E; }
+
+footer, .rodape { background: #0C0F0A; border-top: 1px solid #232B16; color: #7E8C6C; }
+.destaque p, .destaque small, .destaque span { color: #C9D6B2 !important; }
+thead tr, thead th { background: #0C0F0A !important; }
+/* Pílula de conta (injetada pelo auth.js) no tema Volt */
+.energy-account {
+    background: #12170D !important;
+    border: 1px solid #2C3618 !important;
+    box-shadow: none !important;
+    color: #EDF3DF;
+}
+.energy-account button {
+    background: transparent !important;
+    color: #EDF3DF !important;
+    border: 1px solid #2C3618 !important;
+    border-radius: 999px !important;
+}
+.energy-account button.energy-del {
+    color: #FF8A7A !important;
+    border-color: #5A2320 !important;
+}

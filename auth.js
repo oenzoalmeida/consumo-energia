@@ -1,14 +1,14 @@
 'use strict';
 
 const EnergyCloud = (() => {
-  const API = 'https://consumo-energia-backend.vercel.app';
+  const API = '';
   let currentUser = null;
   let resolveReady;
   const ready = new Promise(resolve => { resolveReady = resolve; });
 
   async function request(path, options = {}) {
     const response = await fetch(`${API}${path}`, {
-      credentials: 'include',
+      credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
       ...options
     });
