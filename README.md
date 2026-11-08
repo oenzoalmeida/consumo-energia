@@ -4,7 +4,7 @@ Aplicação web para simular consumo de energia elétrica, estimar custos e comp
 
 ## Demonstração
 
-**Aplicação:** https://consumo-energia-2.web.app
+**Aplicação:** https://consumo-energia-backend.vercel.app (o endereço antigo consumo-energia-2.web.app redireciona para ele)
 
 ## Acesso demo
 
@@ -78,13 +78,15 @@ O CI executa testes automatizados das regras de cálculo do frontend e, no backe
 
 ## Deploy
 
-**Frontend:** Firebase Hosting (`https://consumo-energia-2.web.app`).
+**Interface e API (mesma origem):** função serverless Node na Vercel (`https://consumo-energia-backend.vercel.app`). A interface (arquivos da raiz, copiados para `backend/public/` com `node backend/scripts/sync-public.mjs`; o CI confere que as cópias estão iguais) é servida pelo próprio backend. O cookie de sessão é `HttpOnly; Secure; SameSite=Lax` (first-party), o que funciona no Safari, que bloqueia cookies entre domínios; mutações com cookie passam por verificação de `Origin`/`Referer`.
 
-**Backend:** função serverless Node na Vercel (`https://consumo-energia-backend.vercel.app`).
+**Endereço antigo:** Firebase Hosting (pasta `redirect/`) apenas redireciona (301) para o endereço acima.
 
 **Banco:** PostgreSQL gerenciado no Neon.
 
-## Frontend no Cloudflare Pages (alternativa)
+## Frontend no Cloudflare Pages (alternativa histórica, não recomendada)
+
+> Atenção: hospedar a interface em outro domínio que não o da API quebra o login no Safari (cookies de terceiros bloqueados). Ver `docs/hospedagem-historica.md`.
 
 O frontend pode ser publicado como site estático no Cloudflare Pages. Essa alternativa não foi adotada pela configuração atual do repositório: o frontend permanece no Firebase Hosting e a API na Vercel.
 

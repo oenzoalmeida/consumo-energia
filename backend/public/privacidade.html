@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Política de Privacidade | Consumo de Energia 2.0</title>
+<meta name="description" content="Como o Consumo de Energia 2.0 coleta, usa e protege seus dados: dados de cadastro, simulação, cookies e seus direitos pela LGPD.">
+<link rel="canonical" href="https://consumo-energia-backend.vercel.app/privacidade.html">
+<style>
+body{font-family:Arial,sans-serif;background:#f4f7fb;color:#172033;margin:0;line-height:1.65}
+.wrap{max-width:760px;margin:auto;padding:40px 20px}
+.card{background:#fff;border:1px solid #dce4ed;border-radius:18px;padding:28px;box-shadow:0 12px 35px rgba(20,40,70,.08)}
+h1{font-size:26px;margin:0 0 4px}
+.meta{color:#64748b;font-size:13px;margin-bottom:22px}
+h2{font-size:16px;margin:22px 0 6px}
+p{font-size:14px;margin:0 0 8px}
+a{color:#1d4ed8}
+code{background:#eef3f8;padding:2px 6px;border-radius:6px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap"><section class="card">
+<h1>Política de Privacidade</h1>
+<p class="meta">Última atualização: 12 de setembro de 2026 · versão 1.0</p>
+
+<h2>1. Dados tratados</h2>
+<p>No cadastro são coletados <strong>nome</strong>, <strong>e-mail</strong> e <strong>senha</strong> (armazenada apenas como hash scrypt com sal aleatório). No uso do serviço, é armazenado o <strong>conteúdo da sua simulação</strong>: lista de aparelhos (nome, potência, horas/dias de uso) e a tarifa informada. Não coletamos dados sensíveis, dados de pagamento nem dados de navegação.</p>
+
+<h2>2. Finalidades</h2>
+<p>Os dados são usados exclusivamente para autenticação e para salvar e exibir a sua própria simulação.</p>
+
+<h2>3. Base legal</h2>
+<p>O tratamento se dá com base na execução de contrato (criação e manutenção da conta), conforme o art. 7º, V, da Lei Geral de Proteção de Dados — LGPD (Lei nº 13.709/2018).</p>
+
+<h2>4. Obrigatoriedade</h2>
+<p>Nome, e-mail e senha são obrigatórios para criação da conta; os dados da simulação são opcionais e fornecidos por sua escolha.</p>
+
+<h2>5. Armazenamento e segurança</h2>
+<p>Os dados ficam em banco PostgreSQL gerenciado. Adotamos: hash de senha com scrypt e sal aleatório, comparação em tempo constante, cookie de sessão <code>energy_session</code> HttpOnly/Secure/SameSite=None, consultas SQL parametrizadas e CORS restrito ao domínio do aplicativo.</p>
+
+<h2>6. Retenção e exclusão</h2>
+<p>Os dados são mantidos enquanto a conta existir. Ao usar a opção "Excluir conta", a conta e todos os dados da simulação são apagados de forma definitiva e imediata da base de dados.</p>
+
+<h2>7. Compartilhamento e transferência internacional</h2>
+<p>Seus dados não são vendidos nem compartilhados comercialmente. Utilizamos apenas provedores de infraestrutura necessários à operação: <strong>Render</strong> (hospedagem do aplicativo, servidores nos Estados Unidos) e <strong>Neon</strong> (banco de dados gerenciado). Em razão desses provedores, pode ocorrer <strong>transferência internacional de dados</strong>, nos termos do art. 33 da LGPD.</p>
+
+<h2>8. Cookies</h2>
+<p>Utilizamos apenas o cookie de sessão estritamente necessário para manter você autenticado. Não usamos cookies de analytics, publicidade ou rastreamento.</p>
+
+<h2>9. Direitos do titular</h2>
+<p>Conforme a LGPD, você pode solicitar acesso, correção e exclusão dos seus dados. O acesso e a <strong>exclusão definitiva</strong> estão disponíveis na própria interface; correções de cadastro podem ser solicitadas pelo contato abaixo.</p>
+
+<h2>10. Menores de idade</h2>
+<p>[PENDENTE DE DEFINIÇÃO]</p>
+
+<h2>11. Alterações desta política</h2>
+<p>Esta política pode ser atualizada; a data no topo indica a versão vigente.</p>
+
+<h2>12. Contato</h2>
+<p>Contato para exercício de direitos: enzoalmeida.dev@outlook.com.</p>
+
+<p class="meta"><a href="index.html">Voltar à aplicação</a> · <a href="termos.html">Termos de Uso</a></p>
+</section></div>
+</body>
+</html>

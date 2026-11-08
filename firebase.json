@@ -1,49 +1,8 @@
 {
   "hosting": {
-    "public": ".",
-    "ignore": [
-      "firebase.json",
-      ".firebaserc",
-      "firebase-debug.log",
-      "backend/**",
-      "tests/**",
-      ".github/**",
-      ".git/**",
-      "**/.*",
-      "**/*.md",
-      "LICENSE"
-    ],
-    "headers": [
-      {
-        "source": "/*.html",
-        "headers": [
-          { "key": "Cache-Control", "value": "max-age=0, must-revalidate" }
-        ]
-      },
-      {
-        "source": "/calc.js",
-        "headers": [
-          { "key": "Cache-Control", "value": "max-age=3600" }
-        ]
-      },
-      {
-        "source": "/script.js",
-        "headers": [
-          { "key": "Cache-Control", "value": "max-age=3600" }
-        ]
-      },
-      {
-        "source": "/auth.js",
-        "headers": [
-          { "key": "Cache-Control", "value": "max-age=3600" }
-        ]
-      },
-      {
-        "source": "/style.css",
-        "headers": [
-          { "key": "Cache-Control", "value": "max-age=3600" }
-        ]
-      }
+    "public": "redirect",
+    "redirects": [
+      { "source": "/:path*", "destination": "https://consumo-energia-backend.vercel.app/:path*", "type": 301 }
     ]
   }
 }

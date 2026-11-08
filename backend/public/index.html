@@ -1,5 +1,434 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head><meta charset="utf-8"><title>Consumo Energia API</title></head>
-  <body>Consumo Energia API — consulte <a href="/health">/health</a></body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Consumo de Energia 2.0</title>
+    <meta name="description" content="Simule o consumo elétrico dos seus aparelhos, estime custos e visualize os maiores consumidores.">
+
+    <!-- Open Graph / social preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Consumo de Energia">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:title" content="Consumo de Energia 2.0">
+    <meta property="og:description" content="Simule o consumo elétrico dos seus aparelhos, estime custos e visualize os maiores consumidores.">
+    <meta property="og:url" content="https://consumo-energia-backend.vercel.app/">
+    <meta property="og:image" content="https://consumo-energia-backend.vercel.app/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Consumo de Energia — simulador de consumo elétrico">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Consumo de Energia 2.0">
+    <meta name="twitter:description" content="Simule o consumo elétrico dos seus aparelhos, estime custos e visualize os maiores consumidores.">
+    <meta name="twitter:image" content="https://consumo-energia-backend.vercel.app/og-image.png">
+
+    <link rel="canonical" href="https://consumo-energia-backend.vercel.app/">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<a class="pular-para-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+    <div class="container cabecalho-conteudo">
+
+        <div>
+            <span class="versao">Versão 2.0</span>
+
+            <h1>Consumo de Energia</h1>
+
+            <p>
+                Simule o consumo elétrico dos seus aparelhos,
+                estime custos e visualize os maiores consumidores.
+            </p>
+        </div>
+
+    </div>
+</header>
+
+
+<main class="container" id="conteudo">
+
+    <section class="configuracao">
+
+        <div>
+            <h2>Configuração</h2>
+
+            <p>
+                Defina a tarifa utilizada nas estimativas de custo.
+            </p>
+        </div>
+
+        <div class="tarifa">
+
+            <label for="tarifa">
+                Preço da energia (R$ por kWh)
+            </label>
+
+            <input
+                    type="number"
+                    id="tarifa"
+                    aria-describedby="ajuda-tarifa"
+                    min="0.01"
+                    step="0.01"
+                    value="1.00"
+            >
+
+            <small id="ajuda-tarifa">
+                Consulte o preço do kWh na sua conta de luz. kWh é a unidade usada para medir a energia consumida. O valor informado serve apenas para estimar o custo.
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <section>
+
+        <div class="titulo-section">
+
+            <div>
+                <h2>Novo aparelho</h2>
+
+                <p>
+                    Informe os dados de uso para calcular o consumo mensal.
+                </p>
+            </div>
+
+        </div>
+
+
+        <form id="form-aparelho">
+
+            <input
+                    type="hidden"
+                    id="indice-edicao"
+            >
+
+
+            <div class="campo">
+
+                <label for="nome">
+                    Nome do aparelho
+                </label>
+
+                <input
+                        type="text"
+                        id="nome"
+                        placeholder="Ex.: Ar-condicionado"
+                        required
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="potencia">
+                    Potência do aparelho (watts)
+                </label>
+
+                <input
+                        type="number"
+                        id="potencia"
+                        aria-describedby="ajuda-potencia"
+                        min="1"
+                        placeholder="Ex.: 1500"
+                        required
+                >
+                <small id="ajuda-potencia">Veja a potência em watts (W) na etiqueta do aparelho ou no manual.</small>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="horas">
+                    Horas de uso por dia
+                </label>
+
+                <input
+                        type="number"
+                        id="horas"
+                        min="0.1"
+                        max="24"
+                        step="0.1"
+                        placeholder="Ex.: 6"
+                        required
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="dias">
+                    Dias de uso no mês
+                </label>
+
+                <input
+                        type="number"
+                        id="dias"
+                        min="1"
+                        max="31"
+                        placeholder="Ex.: 30"
+                        required
+                >
+
+            </div>
+
+
+            <div class="botoes-formulario">
+
+                <button
+                        type="submit"
+                        id="botao-salvar"
+                >
+                    Adicionar aparelho
+                </button>
+
+
+                <button
+                        type="button"
+                        id="botao-cancelar"
+                        class="botao-secundario oculto"
+                >
+                    Cancelar edição
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <section>
+
+        <div class="titulo-section">
+
+            <div>
+                <h2>Resumo</h2>
+
+                <p>
+                    Visão geral do consumo cadastrado.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="cards">
+
+            <div class="card">
+                <span>Consumo mensal</span>
+
+                <strong id="consumo-total">
+                    0,00 kWh
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>Custo mensal estimado</span>
+
+                <strong id="custo-total">
+                    R$ 0,00
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>Estimativa anual</span>
+
+                <strong id="custo-anual">
+                    R$ 0,00
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>Aparelhos cadastrados</span>
+
+                <strong id="quantidade-aparelhos">
+                    0
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section>
+
+        <div class="titulo-section">
+
+            <div>
+                <h2>Análise de consumo</h2>
+
+                <p>
+                    Destaques com base nos aparelhos cadastrados.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div
+                id="destaque-consumo"
+                class="destaque-vazio"
+                aria-live="polite"
+        >
+            Cadastre aparelhos para visualizar a análise.
+        </div>
+
+    </section>
+
+
+    <section>
+
+        <div class="titulo-section">
+
+            <div>
+                <h2>Consumo por aparelho</h2>
+
+                <p>
+                    Comparação visual do consumo mensal.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div
+                id="grafico-consumo"
+                class="grafico"
+        >
+
+            <p class="grafico-vazio">
+                Nenhum dado disponível.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section id="comparacao">
+
+        <div class="titulo-section">
+
+            <div>
+                <h2>Quanto você poderia economizar?</h2>
+
+                <p>
+                    Simule uma redução no uso e compare os dois cenários.
+                    A tarifa e os usos cadastrados são premissas suas: o
+                    resultado é uma estimativa, não a previsão exata da fatura.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="controles-comparacao">
+            <label for="percentual-economia">Quanto você pretende reduzir o uso? (%)</label>
+            <input
+                    id="percentual-economia"
+                    type="number"
+                    min="1"
+                    max="99"
+                    step="1"
+                    value="20"
+            >
+            <button id="botao-comparar" type="button">Comparar cenários</button>
+            <button id="botao-exportar" type="button">Exportar estimativa (CSV)</button>
+        </div>
+
+        <div id="resultado-comparacao" role="status" aria-live="polite"></div>
+
+    </section>
+
+
+    <section>
+
+        <div class="titulo-section">
+
+            <div>
+
+                <h2>Aparelhos cadastrados</h2>
+
+                <p>
+                    Confira os valores e gerencie os registros.
+                </p>
+
+            </div>
+
+
+            <button
+                    type="button"
+                    id="botao-limpar"
+                    class="botao-perigo"
+            >
+                Limpar lista
+            </button>
+
+        </div>
+
+
+        <div class="tabela-container">
+
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>Aparelho</th>
+                    <th>Potência</th>
+                    <th>Uso</th>
+                    <th>Consumo</th>
+                    <th>Nível</th>
+                    <th>Custo</th>
+                    <th>Participação</th>
+                    <th>Ações</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody id="lista-aparelhos">
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <p id="mensagem-vazia" aria-live="polite">
+            Nenhum aparelho cadastrado.
+        </p>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <p>
+        Consumo de Energia 2.0 — projeto acadêmico revisitado e aprimorado.<br>
+        Os resultados são estimativas e não substituem a fatura da distribuidora.
+    </p>
+    <p>
+        <a href="termos.html">Termos de Uso</a> · <a href="privacidade.html">Política de Privacidade</a>
+    </p>
+</footer>
+
+
+<script src="calc.js"></script>
+<script src="script.js"></script>
+
+</body>
 </html>
