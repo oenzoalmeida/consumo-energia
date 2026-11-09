@@ -1113,3 +1113,75 @@ thead tr, thead th { background: #0C0F0A !important; }
     color: #FF8A7A !important;
     border-color: #5A2320 !important;
 }
+
+/* ==========================================================================
+   PASSADA VISÍVEL 2 (nov/2026) - tema Volt turbinado
+   Cabeçalho com aurora lima, título em gradiente, raio vazado ao fundo e
+   linha de energia pulsante; cards ganham topo lima luminoso.
+   Apenas CSS: nenhum id, texto ou regra alterada.
+   ========================================================================== */
+.cabecalho {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(46rem 20rem at 50% -40%, rgba(198, 245, 46, 0.16), transparent 62%),
+        repeating-linear-gradient(90deg, transparent 0 47px, rgba(198, 245, 46, 0.045) 47px 48px);
+    border-bottom: 1px solid #2C3618;
+}
+.cabecalho::before {
+    content: "\26A1";
+    position: absolute;
+    right: -1.5rem;
+    top: -3rem;
+    font-size: 15rem;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(198, 245, 46, 0.16);
+    transform: rotate(12deg);
+    pointer-events: none;
+}
+.cabecalho::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #C6F52E 30%, #EDFFB0 50%, #C6F52E 70%, transparent);
+    background-size: 220% 100%;
+    animation: volt-pulso 3.2s linear infinite;
+    opacity: .85;
+}
+@keyframes volt-pulso {
+    from { background-position: 110% 0; }
+    to { background-position: -110% 0; }
+}
+.cabecalho h1 {
+    background: linear-gradient(100deg, #F4F9E8 30%, #C6F52E 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 0 26px rgba(198, 245, 46, 0.28));
+}
+.cabecalho .versao {
+    border: 1px solid rgba(198, 245, 46, 0.55);
+    box-shadow: 0 0 18px rgba(198, 245, 46, 0.18), inset 0 0 12px rgba(198, 245, 46, 0.08);
+}
+main section, .configuracao {
+    transition: border-color .2s, box-shadow .2s;
+}
+main section:hover, .configuracao:hover {
+    border-color: #3A4A1C;
+    box-shadow: 0 0 0 1px rgba(198, 245, 46, 0.10), 0 18px 44px -26px rgba(198, 245, 46, 0.25);
+}
+.card {
+    border-top: 2px solid #C6F52E !important;
+    box-shadow: 0 16px 36px -24px rgba(198, 245, 46, 0.35) !important;
+}
+#botao-salvar, .botao-principal {
+    box-shadow: 0 12px 30px -10px rgba(198, 245, 46, 0.45), 4px 4px 0 rgba(198, 245, 46, .22);
+}
+@media (prefers-reduced-motion: reduce) {
+    .cabecalho::after { animation: none; }
+}
