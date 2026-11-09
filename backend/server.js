@@ -1,5 +1,6 @@
 import { createRateLimitCleanup } from './maintenance.js';
-import { databaseOptions, positiveInteger, proxyHops, createAuthRateLimit } from './security.js';
+import { databaseOptions, positiveInteger, proxyHops, createAuthRateLimit, securityHeaders } from './security.js';
+import { validateUserData } from './validate-user-data.js';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -130,6 +131,9 @@ app.get('/api/data', auth, passwordChanged, async (req,res)=>{
 });
 app.put('/api/data', auth, passwordChanged, async (req,res)=>{
   const data = req.body.data && typeof req.body.data === 'object' ? req.body.data : {};
+  // CE-3: o servidor valida tipos e faixas; o cliente não é confiável.
+  const invalido = validateUserData(data);
+  if (invalido) return res.status(400).json({ error: invalido });
   const baseVersion = req.body.baseVersion;
   if (!Number.isInteger(baseVersion) || baseVersion < 0) {
     return res.status(400).json({ error: 'Versão do cenário ausente; recarregue a página antes de salvar' });
@@ -176,11 +180,7 @@ app.patch('/api/admin/users/:id', auth, passwordChanged, admin, async (req,res)=
 // Interface web servida pela mesma origem da API (cookies first-party, HttpOnly
 // + verificação de Origin). Safari bloqueia cookies entre domínios diferentes.
 const publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'public');
-app.use((_req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  next();
-});
+app.use(securityHeaders());
 app.use(express.static(publicDir, {
   setHeaders(res, file) {
     if (/\.(html|js|css)$/.test(file)) res.setHeader('Cache-Control', 'max-age=0, must-revalidate');

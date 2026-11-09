@@ -62,3 +62,14 @@ test('version conflict: loading cloud version discards local draft explicitly',a
  assert.equal(saves.length,1); // never wrote again
  assert.match(f.status(),/descartadas/);
 });
+
+test('render escapes numeric fields coming from stored data (CE-3 regression)',async()=>{
+ const payload={aparelhos:[{nome:'Geladeira',potencia:'<img src=x onerror=alert(1)>',horas:'<script>alert(2)</script>',dias:30,consumo:0,custo:0}]};
+ const f=fixture(async()=>({data:payload,version:3}),async()=>0);
+ await f.start();await f.flush();
+ const lista=f.nodes.get('lista-aparelhos');
+ assert.ok(lista.children.length>=1,'aparelho carregado deve renderizar uma linha');
+ const html=lista.children.map(tr=>tr.innerHTML).join('');
+ assert.ok(!html.includes('<img'),'campo numérico não pode virar HTML: '+html);
+ assert.ok(html.includes('&lt;img'),'valor deve aparecer escapado como texto');
+});

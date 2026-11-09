@@ -5,7 +5,7 @@ import { copyFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const FRONTEND_FILES = ['index.html', 'admin.html', 'auth.js', 'calc.js', 'script.js', 'style.css', 'privacidade.html', 'termos.html', '404.html', 'og-image.png', 'robots.txt', 'sitemap.xml'];
+export const FRONTEND_FILES = ['index.html', 'admin.html', 'admin.js', 'auth.js', 'calc.js', 'script.js', 'style.css', 'privacidade.html', 'termos.html', '404.html', 'og-image.png', 'robots.txt', 'sitemap.xml'];
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const dest = join(root, 'backend', 'public');
 if (import.meta.url === new URL(process.argv[1], 'file://').href || process.argv[1]?.endsWith('sync-public.mjs')) {
