@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { databaseOptions, positiveInteger, proxyHops, createAuthRateLimit } from './security.js';
+import { databaseOptions, positiveInteger, proxyHops, createAuthRateLimit, securityHeaders } from './security.js';
 
 test('production verifies TLS and URL parameters cannot override policy or CA', () => {
   const result = databaseOptions({ NODE_ENV: 'production', DATABASE_URL: 'postgres://user:pass@localhost/db?sslmode=no-verify&sslrootcert=bad&application_name=test', DATABASE_CA_CERT: 'CA' });
@@ -54,4 +54,22 @@ test('outage, missing migration, permissions and invalid results fail closed', a
     assert.equal(res.headers['Retry-After'], '5');
     assert.ok(!JSON.stringify(res.body).includes('secret'));
   }
+});
+
+test('security headers on every response (CE-1)', () => {
+  let next = 0;
+  const res = response();
+  securityHeaders({ NODE_ENV: 'production' })({}, res, () => next++);
+  assert.equal(next, 1);
+  assert.equal(res.headers['X-Content-Type-Options'], 'nosniff');
+  assert.equal(res.headers['Referrer-Policy'], 'strict-origin-when-cross-origin');
+  assert.equal(res.headers['X-Frame-Options'], 'DENY');
+  assert.match(res.headers['Content-Security-Policy'], /default-src 'self'/);
+  assert.match(res.headers['Content-Security-Policy'], /script-src 'self'/);
+  assert.match(res.headers['Content-Security-Policy'], /frame-ancestors 'none'/);
+  assert.equal(res.headers['Strict-Transport-Security'], 'max-age=15552000; includeSubDomains');
+  const dev = response();
+  securityHeaders({ NODE_ENV: 'development' })({}, dev, () => {});
+  assert.equal(dev.headers['Strict-Transport-Security'], undefined);
+  assert.equal(dev.headers['X-Frame-Options'], 'DENY');
 });

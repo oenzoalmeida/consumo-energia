@@ -65,3 +65,22 @@ export function createAuthRateLimit(pool, { max, windowMs, logger = console }) {
     }
   };
 }
+
+// Security headers on every response (CE-1): anti-clickjacking via
+// X-Frame-Options + frame-ancestors, and a same-origin CSP. style-src keeps
+// 'unsafe-inline' because the pages use a <style> block and style attributes;
+// script-src is 'self' only (inline scripts were moved to external files).
+// HSTS only in production, where TLS is terminated.
+export function securityHeaders(env = process.env) {
+  return (_req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('Content-Security-Policy',
+      "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+    if ((env.NODE_ENV || '') === 'production') {
+      res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+    }
+    next();
+  };
+}

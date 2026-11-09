@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const files = ['index.html', 'admin.html', 'auth.js', 'calc.js', 'script.js', 'style.css', 'privacidade.html', 'termos.html', '404.html', 'og-image.png', 'robots.txt', 'sitemap.xml'];
+const files = ['index.html', 'admin.html', 'admin.js', 'auth.js', 'calc.js', 'script.js', 'style.css', 'privacidade.html', 'termos.html', '404.html', 'og-image.png', 'robots.txt', 'sitemap.xml'];
 const root = path.join(__dirname, '..');
 
 for (const f of files) {
@@ -16,5 +16,5 @@ for (const f of files) {
 
 test('interface usa a mesma origem da API', () => {
   assert.match(fs.readFileSync(path.join(root, 'auth.js'), 'utf8'), /const API = '';/);
-  assert.match(fs.readFileSync(path.join(root, 'admin.html'), 'utf8'), /const API='';/);
+  assert.match(fs.readFileSync(path.join(root, 'admin.js'), 'utf8'), /const API='';/);
 });
