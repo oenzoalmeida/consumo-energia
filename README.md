@@ -40,7 +40,7 @@ Evolução de um projeto acadêmico de cálculo de consumo de energia. O usuári
 
 **Banco de dados:** PostgreSQL (Neon).
 
-**Infraestrutura:** Firebase Hosting (frontend) + Vercel (backend serverless).
+**Infraestrutura:** interface e API na Vercel, na mesma origem. Firebase Hosting mantém o redirecionamento do endereço anterior.
 
 ## Perfis de acesso
 
@@ -88,7 +88,7 @@ O CI executa testes automatizados das regras de cálculo do frontend e, no backe
 
 > Atenção: hospedar a interface em outro domínio que não o da API quebra o login no Safari (cookies de terceiros bloqueados). Ver `docs/hospedagem-historica.md`.
 
-O frontend pode ser publicado como site estático no Cloudflare Pages. Essa alternativa não foi adotada pela configuração atual do repositório: o frontend permanece no Firebase Hosting e a API na Vercel.
+O frontend pode ser publicado como site estático no Cloudflare Pages. Essa alternativa não corresponde à configuração atual do repositório, que serve a interface e a API na mesma origem na Vercel.
 
 A interface chama `https://consumo-energia-backend.vercel.app` por URL absoluta. Trocar a hospedagem do frontend exige permitir a nova origem em `FRONTEND_URL` no projeto do backend na Vercel. A alternativa não elimina eventuais inicializações a frio da função serverless.
 
@@ -111,7 +111,7 @@ O backend aceita uma origem ou uma lista de origens separadas por vírgula em `F
 FRONTEND_URL=https://consumo-energia-2.web.app,https://<projeto>.pages.dev
 ```
 
-A resposta CORS permite somente as origens configuradas, com suporte aos cookies da sessão. Os cookies em produção usam `SameSite=None; Secure`. Atualize as variáveis do backend na Vercel e faça redeploy antes de validar o login no novo frontend.
+A resposta CORS permite somente as origens configuradas, com suporte aos cookies da sessão. O código atual configura os cookies com `SameSite=Lax; Secure`. Uma publicação em outra origem exige revisão da estratégia de autenticação. Atualize as variáveis do backend na Vercel e faça redeploy antes de validar o login no novo frontend.
 
 Após confirmar o funcionamento, mantenha apenas as origens ainda utilizadas. As instruções do ambiente antigo foram preservadas em [Histórico de hospedagem](docs/hospedagem-historica.md).
 
